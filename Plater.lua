@@ -1011,7 +1011,7 @@ Plater.DefaultSpellRangeList = {
 
 	--> return true if the resource bar should shown above the nameplate in the current target nameplate
 	function Plater.IsShowingResourcesOnTarget() --private
-		return GetCVar ("nameplateShowSelf") == CVAR_ENABLED and GetCVar ("nameplateResourceOnTarget") == CVAR_ENABLED
+		return Plater.db.profile.resource_on_target
 	end
 	
 	--> when the player left a zone but is in combat, wait 1 second and trigger the zone changed again
@@ -1132,7 +1132,6 @@ Plater.DefaultSpellRangeList = {
 		
 		--> personal and resources
 		cvarTable ["nameplateShowSelf"] = GetCVar ("nameplateShowSelf")
-		cvarTable ["nameplateResourceOnTarget"] = GetCVar ("nameplateResourceOnTarget")
 		cvarTable ["nameplatePersonalShowAlways"] = GetCVar ("nameplatePersonalShowAlways")
 		cvarTable ["nameplatePersonalShowWithTarget"] = GetCVar ("nameplatePersonalShowWithTarget")
 		cvarTable ["nameplatePersonalShowInCombat"] = GetCVar ("nameplatePersonalShowInCombat")
@@ -3118,7 +3117,7 @@ function Plater.OnInit() --private
 		function Plater.UpdatePersonalBar (self)
 			local showSelf = GetCVarBool ("nameplateShowSelf")
 			if (not showSelf) then
-				if (GetCVarBool ("nameplateResourceOnTarget")) then
+				if Plater.db.profile.resource_on_target then
 					Plater.UpdateResourceFrame()
 				end
 				return
@@ -3210,7 +3209,7 @@ function Plater.OnInit() --private
 			local onCurrentTarget
 			
 			if (not showSelf) then
-				onCurrentTarget = GetCVarBool ("nameplateResourceOnTarget")
+				onCurrentTarget = Plater.db.profile.resource_on_target
 				if (not onCurrentTarget) then
 					return
 				end
@@ -3226,7 +3225,7 @@ function Plater.OnInit() --private
 			resourceFrame:SetAlpha (Plater.db.profile.resources.alpha)
 			
 			--check if resources are placed on the current target
-			onCurrentTarget = GetCVarBool ("nameplateResourceOnTarget")
+			onCurrentTarget = Plater.db.profile.resource_on_target
 			if (onCurrentTarget) then
 				--resource bar are placed on the current target nameplate
 				local targetPlateFrame = C_NamePlate.GetNamePlateForUnit ("target")
@@ -6776,7 +6775,7 @@ end
 	function Plater.ForceChangeBorderColor (self, r, g, b) --private --self = unitFrame
 		--this call is from the retail game, file: blizzard_nameplates.lua
 		if (not self.customBorderColor) then
-			self.healthBar.border:SetVertexColor (r, g, b)
+--			self.healthBar.border:SetVertexColor (r, g, b)
 			self.BorderIsAggroIndicator = true
 		end
 	end
@@ -7886,7 +7885,6 @@ function Plater.SetCVarsOnFirstRun()
 	
 	--disabled:
 		--SetCVar ("nameplateShowSelf", CVAR_DISABLED)
-		--SetCVar ("nameplateResourceOnTarget", CVAR_DISABLED)
 		--SetCVar ("nameplateShowFriends", CVAR_ENABLED)
 	--> location of the personal bar
 	--	SetCVar ("nameplateSelfBottomInset", 20 / 100)
