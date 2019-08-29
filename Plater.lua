@@ -6776,7 +6776,7 @@ end
 	function Plater.ForceChangeBorderColor (self, r, g, b) --private --self = unitFrame
 		--this call is from the retail game, file: blizzard_nameplates.lua
 		if (not self.customBorderColor) then
-			self.healthBar.border:SetVertexColor (r, g, b)
+			--self.healthBar.border:SetVertexColor (r, g, b)
 			self.BorderIsAggroIndicator = true
 		end
 	end
