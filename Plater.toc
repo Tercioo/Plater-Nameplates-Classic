@@ -20,6 +20,8 @@ locales\ruRU.lua
 locales\zhCN.lua
 locales\zhTW.lua
 
+Plater.xml
+
 Plater_DefaultSettings.lua
 
 Plater.lua
