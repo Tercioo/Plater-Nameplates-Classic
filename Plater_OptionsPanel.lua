@@ -140,7 +140,7 @@ function Plater.OpenOptionsPanel()
 	f:SetFrameStrata ("MEDIUM")
 	DF:ApplyStandardBackdrop (f)
 	f:ClearAllPoints()
-	PixelUtil.SetPoint (f, "center", UIParent, "center", 2, 2, 1, 1)
+	DFPixelUtil.SetPoint (f, "center", UIParent, "center", 2, 2, 1, 1)
 
 	local profile = Plater.db.profile
 	

@@ -2161,7 +2161,7 @@ Plater.DefaultSpellRangeList = {
 				--overlay for the healthbar showing the healthbar of the execute (shown when the unit is on execute range)
 				local executeRange = healthBar:CreateTexture (nil, "border")
 				executeRange:SetTexture ([[Interface\AddOns\Plater\images\execute_bar]])
-				PixelUtil.SetPoint (executeRange, "left", healthBar, "left", 0, 0)
+				DFPixelUtil.SetPoint (executeRange, "left", healthBar, "left", 0, 0)
 				healthBar.executeRange = executeRange
 				healthBar.ExecuteRangeBar = executeRange --alias for scripting
 				executeRange:Hide()
@@ -2173,7 +2173,7 @@ Plater.DefaultSpellRangeList = {
 				executeGlowUp:SetHeight (32)		
 				executeGlowUp:SetBlendMode ("ADD")
 				executeGlowUp:Hide()
-				PixelUtil.SetPoint (executeGlowUp, "bottom", healthBar, "top", 0, 0)
+				DFPixelUtil.SetPoint (executeGlowUp, "bottom", healthBar, "top", 0, 0)
 				healthBar.ExecuteGlowUp = executeGlowUp
 				
 				local executeGlowDown = healthBar:CreateTexture (nil, "overlay")
@@ -2182,7 +2182,7 @@ Plater.DefaultSpellRangeList = {
 				executeGlowDown:SetHeight (30)
 				executeGlowDown:SetBlendMode ("ADD")
 				executeGlowDown:Hide()
-				PixelUtil.SetPoint (executeGlowDown, "top", healthBar, "bottom", 0, 0)
+				DFPixelUtil.SetPoint (executeGlowDown, "top", healthBar, "bottom", 0, 0)
 				healthBar.ExecuteGlowDown = executeGlowDown
 				
 				local executeGlowAnimationOnPlay = function (self)
@@ -2203,7 +2203,7 @@ Plater.DefaultSpellRangeList = {
 			--> create the raid target widgets
 				--raid target inside the health bar
 				local raidTarget = healthBar:CreateTexture (nil, "overlay")
-				PixelUtil.SetPoint (raidTarget, "right", raidTarget:GetParent(), "right", -2, 0)
+				DFPixelUtil.SetPoint (raidTarget, "right", raidTarget:GetParent(), "right", -2, 0)
 				plateFrame.RaidTarget = raidTarget
 				healthBar.ExtraRaidMark = raidTarget --alias for scripting
 
@@ -2211,7 +2211,7 @@ Plater.DefaultSpellRangeList = {
 				plateFrame.unitFrame.PlaterRaidTargetFrame = CreateFrame ("frame", nil, plateFrame.unitFrame)
 				local targetFrame = plateFrame.unitFrame.PlaterRaidTargetFrame
 				targetFrame:SetSize (22, 22)
-				PixelUtil.SetPoint (targetFrame, "right", healthBar, "left", -15, 0)
+				DFPixelUtil.SetPoint (targetFrame, "right", healthBar, "left", -15, 0)
 				
 				--icon
 				targetFrame.RaidTargetIcon = targetFrame:CreateTexture (nil, "artwork")
@@ -2251,12 +2251,12 @@ Plater.DefaultSpellRangeList = {
 				--special name and title
 				local ActorNameSpecial = plateFrame:CreateFontString (nil, "artwork", "GameFontNormal")
 				plateFrame.ActorNameSpecial = ActorNameSpecial
-				PixelUtil.SetPoint (plateFrame.ActorNameSpecial, "center", plateFrame, "center", 0, 0)
+				DFPixelUtil.SetPoint (plateFrame.ActorNameSpecial, "center", plateFrame, "center", 0, 0)
 				plateFrame.ActorNameSpecial:Hide()
 				
 				local ActorTitleSpecial = plateFrame:CreateFontString (nil, "artwork", "GameFontNormal")
 				plateFrame.ActorTitleSpecial = ActorTitleSpecial
-				PixelUtil.SetPoint (plateFrame.ActorTitleSpecial, "top", ActorNameSpecial, "bottom", 0, -2)
+				DFPixelUtil.SetPoint (plateFrame.ActorTitleSpecial, "top", ActorNameSpecial, "bottom", 0, -2)
 				plateFrame.ActorTitleSpecial:Hide()
 				
 				plateFrame.unitFrame.ActorNameSpecial = ActorNameSpecial --alias for scripts
@@ -2349,19 +2349,17 @@ Plater.DefaultSpellRangeList = {
 			
 			--> border
 				--create a border using default borders from the retail game
-				--local healthBarBorder = CreateFrame ("frame", nil, plateFrame.unitFrame.healthBar, "NamePlateFullBorderTemplate")
-
-				plateFrame.unitFrame.healthBar.border = {}
+				local healthBarBorder = CreateFrame ("frame", nil, plateFrame.unitFrame.healthBar, "PlaterNamePlateFullBorderTemplate")
+				plateFrame.unitFrame.healthBar.border = healthBarBorder
 				
-				--local powerBarBorder = CreateFrame ("frame", nil, plateFrame.unitFrame.powerBar, "NamePlateFullBorderTemplate")
-				plateFrame.unitFrame.powerBar.border = {}
-				--powerBarBorder:SetVertexColor (0, 0, 0, 1)
+				local powerBarBorder = CreateFrame ("frame", nil, plateFrame.unitFrame.powerBar, "PlaterNamePlateFullBorderTemplate")
+				powerBarBorder:SetVertexColor (0, 0, 0, 1)
 			
 			--> focus indicator
 				local focusIndicator = healthBar:CreateTexture (nil, "overlay")
 				focusIndicator:SetDrawLayer ("overlay", 2)
-				PixelUtil.SetPoint (focusIndicator, "topleft", healthBar, "topleft", 0, 0)
-				PixelUtil.SetPoint (focusIndicator, "bottomright", healthBar, "bottomright", 0, 0)
+				DFPixelUtil.SetPoint (focusIndicator, "topleft", healthBar, "topleft", 0, 0)
+				DFPixelUtil.SetPoint (focusIndicator, "bottomright", healthBar, "bottomright", 0, 0)
 				focusIndicator:Hide()
 				healthBar.FocusIndicator = focusIndicator
 				plateFrame.FocusIndicator = focusIndicator
@@ -2369,8 +2367,8 @@ Plater.DefaultSpellRangeList = {
 			
 			--> low aggro warning
 				plateFrame.unitFrame.aggroGlowUpper = plateFrame:CreateTexture (nil, "background", -4)
-				PixelUtil.SetPoint (plateFrame.unitFrame.aggroGlowUpper, "bottomleft", plateFrame.unitFrame.healthBar, "topleft", -3, 0)
-				PixelUtil.SetPoint (plateFrame.unitFrame.aggroGlowUpper, "bottomright", plateFrame.unitFrame.healthBar, "topright", 3, 0)
+				DFPixelUtil.SetPoint (plateFrame.unitFrame.aggroGlowUpper, "bottomleft", plateFrame.unitFrame.healthBar, "topleft", -3, 0)
+				DFPixelUtil.SetPoint (plateFrame.unitFrame.aggroGlowUpper, "bottomright", plateFrame.unitFrame.healthBar, "topright", 3, 0)
 				plateFrame.unitFrame.aggroGlowUpper:SetTexture ([[Interface\BUTTONS\UI-Panel-Button-Glow]])
 				plateFrame.unitFrame.aggroGlowUpper:SetTexCoord (0, 95/128, 0, 9/64)
 				plateFrame.unitFrame.aggroGlowUpper:SetBlendMode ("ADD")
@@ -2378,8 +2376,8 @@ Plater.DefaultSpellRangeList = {
 				plateFrame.unitFrame.aggroGlowUpper:Hide()
 				
 				plateFrame.unitFrame.aggroGlowLower = plateFrame:CreateTexture (nil, "background", -4)
-				PixelUtil.SetPoint (plateFrame.unitFrame.aggroGlowLower, "topleft", plateFrame.unitFrame.healthBar, "bottomleft", -3, 0)
-				PixelUtil.SetPoint (plateFrame.unitFrame.aggroGlowLower, "topright", plateFrame.unitFrame.healthBar, "bottomright", 3, 0)
+				DFPixelUtil.SetPoint (plateFrame.unitFrame.aggroGlowLower, "topleft", plateFrame.unitFrame.healthBar, "bottomleft", -3, 0)
+				DFPixelUtil.SetPoint (plateFrame.unitFrame.aggroGlowLower, "topright", plateFrame.unitFrame.healthBar, "bottomright", 3, 0)
 				plateFrame.unitFrame.aggroGlowLower:SetTexture ([[Interface\BUTTONS\UI-Panel-Button-Glow]])
 				plateFrame.unitFrame.aggroGlowLower:SetTexCoord (0, 95/128, 30/64, 38/64)
 				plateFrame.unitFrame.aggroGlowLower:SetBlendMode ("ADD")
@@ -2654,9 +2652,9 @@ Plater.DefaultSpellRangeList = {
 			
 			--icone da cast bar
 			castBar.Icon:ClearAllPoints()
-			PixelUtil.SetPoint (castBar.Icon, "left", castBar, "left", 0, 0)
+			DFPixelUtil.SetPoint (castBar.Icon, "left", castBar, "left", 0, 0)
 			castBar.BorderShield:ClearAllPoints()
-			PixelUtil.SetPoint (castBar.BorderShield, "left", castBar, "left", 0, 0)
+			DFPixelUtil.SetPoint (castBar.BorderShield, "left", castBar, "left", 0, 0)
 			
 			--esconde os glow de aggro
 			unitFrame.aggroGlowUpper:Hide()
@@ -5053,8 +5051,8 @@ end
 			--health bar
 				-- ensure that we are using the configured size, as it will be automatically scaled
 				healthBar:ClearAllPoints()
-				PixelUtil.SetPoint (healthBar, "center", unitFrame, "center", 0, 0)
-				PixelUtil.SetSize (healthBar, healthBarWidth, healthBarHeight)
+				DFPixelUtil.SetPoint (healthBar, "center", unitFrame, "center", 0, 0)
+				DFPixelUtil.SetSize (healthBar, healthBarWidth, healthBarHeight)
 		--end of patch
 			--update scale
 			Plater.UpdateUIParentScale (plateFrame)
@@ -5073,24 +5071,24 @@ end
 				local yOffSet = (plateFrame:GetHeight() - healthBarHeight) / 2
 				
 				healthBar:ClearAllPoints()
-				PixelUtil.SetPoint (healthBar, "topleft", unitFrame, "topleft", xOffSet + profile.global_offset_x, -yOffSet + profile.global_offset_y)
-				PixelUtil.SetPoint (healthBar, "bottomright", unitFrame, "bottomright", -xOffSet + profile.global_offset_x, yOffSet + profile.global_offset_y)
+				DFPixelUtil.SetPoint (healthBar, "topleft", unitFrame, "topleft", xOffSet + profile.global_offset_x, -yOffSet + profile.global_offset_y)
+				DFPixelUtil.SetPoint (healthBar, "bottomright", unitFrame, "bottomright", -xOffSet + profile.global_offset_x, yOffSet + profile.global_offset_y)
 		end
 		
 		--cast bar - is set by default below the healthbar
 			castBar:ClearAllPoints()
-			PixelUtil.SetPoint (castBar, "topleft", healthBar, "bottomleft", castBarOffSetX, castBarOffSetY)
-			PixelUtil.SetPoint (castBar, "topright", healthBar, "bottomright", -castBarOffSetX, castBarOffSetY)
-			PixelUtil.SetHeight (castBar, castBarHeight)
-			PixelUtil.SetSize (castBar.Icon, castBarHeight, castBarHeight)
-			PixelUtil.SetSize (castBar.BorderShield, castBarHeight * 1.4, castBarHeight * 1.4)
-			PixelUtil.SetSize (castBar.Spark, profile.cast_statusbar_spark_width, castBarHeight)
+			DFPixelUtil.SetPoint (castBar, "topleft", healthBar, "bottomleft", castBarOffSetX, castBarOffSetY)
+			DFPixelUtil.SetPoint (castBar, "topright", healthBar, "bottomright", -castBarOffSetX, castBarOffSetY)
+			DFPixelUtil.SetHeight (castBar, castBarHeight)
+			DFPixelUtil.SetSize (castBar.Icon, castBarHeight, castBarHeight)
+			DFPixelUtil.SetSize (castBar.BorderShield, castBarHeight * 1.4, castBarHeight * 1.4)
+			DFPixelUtil.SetSize (castBar.Spark, profile.cast_statusbar_spark_width, castBarHeight)
 
 		--power bar
 			powerBar:ClearAllPoints()
-			PixelUtil.SetPoint (powerBar, "topleft", healthBar, "bottomleft", powerBarOffSetX, powerBarOffSetY)
-			PixelUtil.SetPoint (powerBar, "topright", healthBar, "bottomright", -powerBarOffSetX, powerBarOffSetY)
-			PixelUtil.SetSize (powerBar, powerBarWidth, powerBarHeight)
+			DFPixelUtil.SetPoint (powerBar, "topleft", healthBar, "bottomleft", powerBarOffSetX, powerBarOffSetY)
+			DFPixelUtil.SetPoint (powerBar, "topright", healthBar, "bottomright", -powerBarOffSetX, powerBarOffSetY)
+			DFPixelUtil.SetSize (powerBar, powerBarWidth, powerBarHeight)
 			
 			--power bar are hidden by default, show it if there's a custom size for it
 			if (unitFrame.customPowerBarWidth and unitFrame.customPowerBarHeight) then
@@ -5101,10 +5099,10 @@ end
 			--DB_AURA_Y_OFFSET = profile.aura_y_offset is from the buff Settings tab
 			--plateConfigs.buff_frame_y_offset is the offset from the actor type, e.g. enemy npc
 			buffFrame1:ClearAllPoints()
-			PixelUtil.SetPoint (buffFrame1, "bottom", unitFrame, "top", DB_AURA_X_OFFSET,  plateConfigs.buff_frame_y_offset + DB_AURA_Y_OFFSET)
+			DFPixelUtil.SetPoint (buffFrame1, "bottom", unitFrame, "top", DB_AURA_X_OFFSET,  plateConfigs.buff_frame_y_offset + DB_AURA_Y_OFFSET)
 			
 			buffFrame2:ClearAllPoints()
-			PixelUtil.SetPoint (buffFrame2, "bottom", unitFrame, "top", Plater.db.profile.aura2_x_offset,  plateConfigs.buff_frame_y_offset + Plater.db.profile.aura2_y_offset)
+			DFPixelUtil.SetPoint (buffFrame2, "bottom", unitFrame, "top", Plater.db.profile.aura2_x_offset,  plateConfigs.buff_frame_y_offset + Plater.db.profile.aura2_y_offset)
 	end
 	
 	--debug function to print the size of the anchor for each aura container
@@ -5802,16 +5800,16 @@ end
 		plateFrame.TargetNeonUp:SetVertexColor (unpack (color))
 		plateFrame.TargetNeonUp:SetAlpha (alpha)
 		plateFrame.TargetNeonUp:SetTexture (texture)
-		PixelUtil.SetHeight (plateFrame.TargetNeonUp, height)
-		PixelUtil.SetPoint (plateFrame.TargetNeonUp, "bottomleft", healthBar, "topleft", 0, 0)
-		PixelUtil.SetPoint (plateFrame.TargetNeonUp, "bottomright", healthBar, "topright", 0, 0)
+		DFPixelUtil.SetHeight (plateFrame.TargetNeonUp, height)
+		DFPixelUtil.SetPoint (plateFrame.TargetNeonUp, "bottomleft", healthBar, "topleft", 0, 0)
+		DFPixelUtil.SetPoint (plateFrame.TargetNeonUp, "bottomright", healthBar, "topright", 0, 0)
 
 		plateFrame.TargetNeonDown:SetVertexColor (unpack (color))
 		plateFrame.TargetNeonDown:SetAlpha (alpha)
 		plateFrame.TargetNeonDown:SetTexture (texture)
-		PixelUtil.SetHeight (plateFrame.TargetNeonDown, height)
-		PixelUtil.SetPoint (plateFrame.TargetNeonDown, "topleft", healthBar, "bottomleft", 0, 0)
-		PixelUtil.SetPoint (plateFrame.TargetNeonDown, "topright", healthBar, "bottomright", 0, 0)
+		DFPixelUtil.SetHeight (plateFrame.TargetNeonDown, height)
+		DFPixelUtil.SetPoint (plateFrame.TargetNeonDown, "topleft", healthBar, "bottomleft", 0, 0)
+		DFPixelUtil.SetPoint (plateFrame.TargetNeonDown, "topright", healthBar, "bottomright", 0, 0)
 	end
 
 	function Plater.UpdateTargetIndicator (plateFrame)
@@ -5860,16 +5858,16 @@ end
 				texture:SetDesaturated (desaturated)
 				
 				if (i == 1) then
-					PixelUtil.SetPoint (texture, "topleft", plateFrame.unitFrame.healthBar, "topleft", -x, y)
+					DFPixelUtil.SetPoint (texture, "topleft", plateFrame.unitFrame.healthBar, "topleft", -x, y)
 					
 				elseif (i == 2) then
-					PixelUtil.SetPoint (texture, "bottomleft", plateFrame.unitFrame.healthBar, "bottomleft", -x, -y)
+					DFPixelUtil.SetPoint (texture, "bottomleft", plateFrame.unitFrame.healthBar, "bottomleft", -x, -y)
 					
 				elseif (i == 3) then
-					PixelUtil.SetPoint (texture, "bottomright", plateFrame.unitFrame.healthBar, "bottomright", x, -y)
+					DFPixelUtil.SetPoint (texture, "bottomright", plateFrame.unitFrame.healthBar, "bottomright", x, -y)
 					
 				elseif (i == 4) then
-					PixelUtil.SetPoint (texture, "topright", plateFrame.unitFrame.healthBar, "topright", x, y)
+					DFPixelUtil.SetPoint (texture, "topright", plateFrame.unitFrame.healthBar, "topright", x, y)
 					
 				end
 			end
@@ -5886,16 +5884,16 @@ end
 				texture:SetTexture (path)
 				texture:SetBlendMode (blend)
 				texture:SetTexCoord (unpack (coords [i]))
-				PixelUtil.SetSize (texture, width * scale, height * scale)
+				DFPixelUtil.SetSize (texture, width * scale, height * scale)
 				texture:SetDesaturated (desaturated)
 				texture:SetAlpha (alpha)
 				texture:SetVertexColor (overlayColorR, overlayColorG, overlayColorB)
 				
 				if (i == 1) then
-					PixelUtil.SetPoint (texture, "left", plateFrame.unitFrame.healthBar, "left", -x, y)
+					DFPixelUtil.SetPoint (texture, "left", plateFrame.unitFrame.healthBar, "left", -x, y)
 					
 				elseif (i == 2) then
-					PixelUtil.SetPoint (texture, "right", plateFrame.unitFrame.healthBar, "right", x, -y)
+					DFPixelUtil.SetPoint (texture, "right", plateFrame.unitFrame.healthBar, "right", x, -y)
 				end
 			end
 			
@@ -5942,7 +5940,7 @@ end
 			
 			--set the point of the name and guild texts
 			nameFontString:ClearAllPoints()
-			PixelUtil.SetPoint (plateFrame.ActorNameSpecial, "center", plateFrame, "center", 0, 10)
+			DFPixelUtil.SetPoint (plateFrame.ActorNameSpecial, "center", plateFrame, "center", 0, 10)
 			
 			--format the color if is the same guild, a friend from friends list or color by player class
 			if (Plater.db.profile.plate_config [ACTORTYPE_FRIENDLY_PLAYER].actorname_use_guild_color and plateFrame.playerGuildName == Plater.PlayerGuildName) then
@@ -5982,8 +5980,8 @@ end
 			plateFrame.ActorNameSpecial:ClearAllPoints()
 			plateFrame.ActorTitleSpecial:ClearAllPoints()
 			
-			PixelUtil.SetPoint (plateFrame.ActorNameSpecial, "center", plateFrame, "center", 0, 10)
-			PixelUtil.SetPoint (plateFrame.ActorTitleSpecial, "top", plateFrame.ActorNameSpecial, "bottom", 0, -2)
+			DFPixelUtil.SetPoint (plateFrame.ActorNameSpecial, "center", plateFrame, "center", 0, 10)
+			DFPixelUtil.SetPoint (plateFrame.ActorTitleSpecial, "top", plateFrame.ActorNameSpecial, "bottom", 0, -2)
 
 			--there's two ways of showing this for friendly npcs (selected from the options panel): show all names or only npcs with profession names
 			--enemy npcs always show all
@@ -6027,7 +6025,7 @@ end
 						subTitle = DF:RemoveRealmName (subTitle)
 						plateFrame.ActorTitleSpecial:SetText ("<" .. subTitle .. ">")
 						plateFrame.ActorTitleSpecial:ClearAllPoints()
-						PixelUtil.SetPoint (plateFrame.ActorTitleSpecial, "top", plateFrame.ActorNameSpecial, "bottom", 0, -2)
+						DFPixelUtil.SetPoint (plateFrame.ActorTitleSpecial, "top", plateFrame.ActorNameSpecial, "bottom", 0, -2)
 						
 						plateFrame.ActorTitleSpecial:SetTextColor (r, g, b, a)
 						DF:SetFontSize (plateFrame.ActorTitleSpecial, plateConfigs.big_actortitle_text_size)
@@ -6055,7 +6053,7 @@ end
 						subTitle = DF:RemoveRealmName (subTitle)
 						plateFrame.ActorTitleSpecial:SetText ("<" .. subTitle .. ">")
 						plateFrame.ActorTitleSpecial:ClearAllPoints()
-						PixelUtil.SetPoint (plateFrame.ActorTitleSpecial, "top", plateFrame.ActorNameSpecial, "bottom", 0, -2)
+						DFPixelUtil.SetPoint (plateFrame.ActorTitleSpecial, "top", plateFrame.ActorNameSpecial, "bottom", 0, -2)
 						
 						plateFrame.ActorTitleSpecial:SetTextColor (unpack (plateConfigs.big_actortitle_text_color))
 						DF:SetFontSize (plateFrame.ActorTitleSpecial, plateConfigs.big_actortitle_text_size)
@@ -6075,7 +6073,7 @@ end
 						subTitle = DF:RemoveRealmName (subTitle)
 						plateFrame.ActorTitleSpecial:SetText ("<" .. subTitle .. ">")
 						plateFrame.ActorTitleSpecial:ClearAllPoints()
-						PixelUtil.SetPoint (plateFrame.ActorTitleSpecial, "top", plateFrame.ActorNameSpecial, "bottom", 0, -2)
+						DFPixelUtil.SetPoint (plateFrame.ActorTitleSpecial, "top", plateFrame.ActorNameSpecial, "bottom", 0, -2)
 						
 						plateFrame.ActorTitleSpecial:SetTextColor (unpack (plateConfigs.big_actortitle_text_color))
 						plateFrame.ActorNameSpecial:SetTextColor (unpack (plateConfigs.big_actorname_text_color))
@@ -6129,7 +6127,7 @@ end
 			Plater.SetFontOutlineAndShadow (nameString, plateConfigs.actorname_text_outline, plateConfigs.actorname_text_shadow_color, plateConfigs.actorname_text_shadow_color_offset[1], plateConfigs.actorname_text_shadow_color_offset[2])
 
 			Plater.SetAnchor (nameString, plateConfigs.actorname_text_anchor)
-			--PixelUtil.SetHeight (nameString, nameString:GetLineHeight())
+			--DFPixelUtil.SetHeight (nameString, nameString:GetLineHeight())
 		end
 		
 		if (plateFrame.playerGuildName) then
@@ -6232,7 +6230,7 @@ end
 				DF:SetFontColor (lifeString, plateConfigs.percent_text_color)
 
 				Plater.SetAnchor (lifeString, plateConfigs.percent_text_anchor)
-				PixelUtil.SetHeight (lifeString, lifeString:GetLineHeight())
+				DFPixelUtil.SetHeight (lifeString, lifeString:GetLineHeight())
 				
 				lifeString:SetAlpha (plateConfigs.percent_text_alpha)
 			end
@@ -6775,7 +6773,7 @@ end
 	function Plater.ForceChangeBorderColor (self, r, g, b) --private --self = unitFrame
 		--this call is from the retail game, file: blizzard_nameplates.lua
 		if (not self.customBorderColor) then
---			self.healthBar.border:SetVertexColor (r, g, b)
+			self.healthBar.border:SetVertexColor (r, g, b)
 			self.BorderIsAggroIndicator = true
 		end
 	end
@@ -6784,11 +6782,11 @@ end
 	function Plater.UpdateBorderColor (self) --self is unitFrame
 		--set the border color
 		if (not self.customBorderColor) then
---			self.healthBar.border:SetVertexColor (DB_BORDER_COLOR_R, DB_BORDER_COLOR_G, DB_BORDER_COLOR_B, DB_BORDER_COLOR_A)
---			self.powerBar.border:SetVertexColor (DB_BORDER_COLOR_R, DB_BORDER_COLOR_G, DB_BORDER_COLOR_B, DB_BORDER_COLOR_A)
+			self.healthBar.border:SetVertexColor (DB_BORDER_COLOR_R, DB_BORDER_COLOR_G, DB_BORDER_COLOR_B, DB_BORDER_COLOR_A)
+			self.powerBar.border:SetVertexColor (DB_BORDER_COLOR_R, DB_BORDER_COLOR_G, DB_BORDER_COLOR_B, DB_BORDER_COLOR_A)
 		else
---			self.healthBar.border:SetVertexColor (unpack (self.customBorderColor))
---0			self.powerBar.border:SetVertexColor (unpack (self.customBorderColor))
+			self.healthBar.border:SetVertexColor (unpack (self.customBorderColor))
+			self.powerBar.border:SetVertexColor (unpack (self.customBorderColor))
 		end
 	end
 
@@ -6819,11 +6817,11 @@ end
 			return
 		end
 		
-		--plateFrame.unitFrame.healthBar.border:SetBorderSizes (DB_BORDER_THICKNESS, DB_BORDER_THICKNESS, DB_BORDER_THICKNESS, DB_BORDER_THICKNESS)
-		--plateFrame.unitFrame.healthBar.border:UpdateSizes()
+		plateFrame.unitFrame.healthBar.border:SetBorderSizes (DB_BORDER_THICKNESS, DB_BORDER_THICKNESS, DB_BORDER_THICKNESS, DB_BORDER_THICKNESS)
+		plateFrame.unitFrame.healthBar.border:UpdateSizes()
 		
-		--plateFrame.unitFrame.powerBar.border:SetBorderSizes (DB_BORDER_THICKNESS, DB_BORDER_THICKNESS, DB_BORDER_THICKNESS, DB_BORDER_THICKNESS)
-		--plateFrame.unitFrame.powerBar.border:UpdateSizes()
+		plateFrame.unitFrame.powerBar.border:SetBorderSizes (DB_BORDER_THICKNESS, DB_BORDER_THICKNESS, DB_BORDER_THICKNESS, DB_BORDER_THICKNESS)
+		plateFrame.unitFrame.powerBar.border:UpdateSizes()
 	end
 
 	-- ~raidmarker ~raidtarget
@@ -7027,9 +7025,9 @@ end
 			local attachTo = plateFrame.IconIndicators [plateFrame.IconIndicators.Next - 1]
 			--se for menor que 4 ele deve crescer para o lado da esquerda, nos outros casos vai para a direita
 			if (Plater.db.profile.indicator_anchor.side < 4) then
-				PixelUtil.SetPoint (thisIndicator, "right", attachTo, "left", -2, 0)
+				DFPixelUtil.SetPoint (thisIndicator, "right", attachTo, "left", -2, 0)
 			else
-				PixelUtil.SetPoint (thisIndicator, "left", attachTo, "right", 1, 0)
+				DFPixelUtil.SetPoint (thisIndicator, "left", attachTo, "right", 1, 0)
 			end
 		end
 		
@@ -7107,55 +7105,55 @@ end
 	local anchor_functions = {
 		function (widget, config, attachTo)--1
 			widget:ClearAllPoints()
-			PixelUtil.SetPoint (widget, "bottomleft", attachTo, "topleft", config.x, config.y, 0, 0)
+			DFPixelUtil.SetPoint (widget, "bottomleft", attachTo, "topleft", config.x, config.y, 0, 0)
 		end,
 		function (widget, config, attachTo)--2
 			widget:ClearAllPoints()
-			PixelUtil.SetPoint (widget, "right", attachTo, "left", config.x, config.y, 0, 0)
+			DFPixelUtil.SetPoint (widget, "right", attachTo, "left", config.x, config.y, 0, 0)
 		end,
 		function (widget, config, attachTo)--3
 			widget:ClearAllPoints()
-			PixelUtil.SetPoint (widget, "topleft", attachTo, "bottomleft", config.x, config.y, 0, 0)
+			DFPixelUtil.SetPoint (widget, "topleft", attachTo, "bottomleft", config.x, config.y, 0, 0)
 		end,
 		function (widget, config, attachTo)--4
 			widget:ClearAllPoints()
-			PixelUtil.SetPoint (widget, "top", attachTo, "bottom", config.x, config.y, 0, 0)
+			DFPixelUtil.SetPoint (widget, "top", attachTo, "bottom", config.x, config.y, 0, 0)
 		end,
 		function (widget, config, attachTo)--5
 			widget:ClearAllPoints()
-			PixelUtil.SetPoint (widget, "topright", attachTo, "bottomright", config.x, config.y, 0, 0)
+			DFPixelUtil.SetPoint (widget, "topright", attachTo, "bottomright", config.x, config.y, 0, 0)
 		end,
 		function (widget, config, attachTo)--6
 			widget:ClearAllPoints()
-			PixelUtil.SetPoint (widget, "left", attachTo, "right", config.x, config.y, 0, 0)
+			DFPixelUtil.SetPoint (widget, "left", attachTo, "right", config.x, config.y, 0, 0)
 		end,
 		function (widget, config, attachTo)--7
 			widget:ClearAllPoints()
-			PixelUtil.SetPoint (widget, "bottomright", attachTo, "topright", config.x, config.y, 0, 0)
+			DFPixelUtil.SetPoint (widget, "bottomright", attachTo, "topright", config.x, config.y, 0, 0)
 		end,
 		function (widget, config, attachTo)--8
 			widget:ClearAllPoints()
-			PixelUtil.SetPoint (widget, "bottom", attachTo, "top", config.x, config.y, 0, 0)
+			DFPixelUtil.SetPoint (widget, "bottom", attachTo, "top", config.x, config.y, 0, 0)
 		end,
 		function (widget, config, attachTo)--9
 			widget:ClearAllPoints()
-			PixelUtil.SetPoint (widget, "center", attachTo, "center", config.x, config.y, 0, 0)
+			DFPixelUtil.SetPoint (widget, "center", attachTo, "center", config.x, config.y, 0, 0)
 		end,
 		function (widget, config, attachTo)--10
 			widget:ClearAllPoints()
-			PixelUtil.SetPoint (widget, "left", attachTo, "left", config.x, config.y, 0, 0)
+			DFPixelUtil.SetPoint (widget, "left", attachTo, "left", config.x, config.y, 0, 0)
 		end,
 		function (widget, config, attachTo)--11
 			widget:ClearAllPoints()
-			PixelUtil.SetPoint (widget, "right", attachTo, "right", config.x, config.y, 0, 0)
+			DFPixelUtil.SetPoint (widget, "right", attachTo, "right", config.x, config.y, 0, 0)
 		end,
 		function (widget, config, attachTo)--12
 			widget:ClearAllPoints()
-			PixelUtil.SetPoint (widget, "top", attachTo, "top", config.x, config.y, 0, 0)
+			DFPixelUtil.SetPoint (widget, "top", attachTo, "top", config.x, config.y, 0, 0)
 		end,
 		function (widget, config, attachTo)--13
 			widget:ClearAllPoints()
-			PixelUtil.SetPoint (widget, "bottom", attachTo, "bottom", config.x, config.y, 0, 0)
+			DFPixelUtil.SetPoint (widget, "bottom", attachTo, "bottom", config.x, config.y, 0, 0)
 		end
 	}
 
@@ -8666,7 +8664,7 @@ end
 		--> glow
 		local glow = f:CreateTexture (nil, "background")
 		glow:SetTexture ([[Interface\AddOns\Plater\images\nameplate_glow]])
-		PixelUtil.SetPoint (glow, "center", frame, "center", 0, 0)
+		DFPixelUtil.SetPoint (glow, "center", frame, "center", 0, 0)
 		glow:SetSize (frame:GetWidth() + frame:GetWidth()/2.3, 36)
 		glow:SetBlendMode ("ADD")
 		glow:SetVertexColor (DF:ParseColors (color or "white"))
