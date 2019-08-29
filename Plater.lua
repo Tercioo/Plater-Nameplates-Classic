@@ -6683,8 +6683,8 @@ end
 			unitFrame.targetOverlayTexture:SetAlpha (profile.health_selection_overlay_alpha)
 			
 			--heal prediction
-			unitFrame.healthBar.Settings.ShowHealingPrediction = Plater.db.profile.show_health_prediction
-			unitFrame.healthBar.Settings.ShowShields = Plater.db.profile.show_shield_prediction
+			unitFrame.healthBar.Settings.ShowHealingPrediction = false --Plater.db.profile.show_health_prediction
+			unitFrame.healthBar.Settings.ShowShields = false --Plater.db.profile.show_shield_prediction
 			if (unitFrame.healthBar.unit) then
 				unitFrame.healthBar:UNIT_HEALTH()
 			end

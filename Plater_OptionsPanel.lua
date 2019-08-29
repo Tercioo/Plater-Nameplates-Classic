@@ -169,7 +169,8 @@ function Plater.OpenOptionsPanel()
 		{name = "LevelStrataConfig", title = L["OPTIONS_TABNAME_STRATA"]},
 		{name = "Scripting", title = L["OPTIONS_TABNAME_SCRIPTING"]},
 		{name = "AutoRunCode", title = L["OPTIONS_TABNAME_MODDING"]},
-		{name = "PersonalBar", title = L["OPTIONS_TABNAME_PERSONAL"]},
+		--{name = "PersonalBar", title = L["OPTIONS_TABNAME_PERSONAL"]},
+		{name = "Automation", title = L["OPTIONS_TABNAME_AUTO"]},
 		{name = "AdvancedConfig", title = L["OPTIONS_TABNAME_ADVANCED"]},
 		
 		{name = "DebuffConfig", title = L["OPTIONS_TABNAME_BUFF_SETTINGS"]},
@@ -183,7 +184,6 @@ function Plater.OpenOptionsPanel()
 
 		{name = "ColorManagement", title = L["OPTIONS_TABNAME_COLORSNPC"]},
 		{name = "AnimationPanel", title = L["OPTIONS_TABNAME_ANIMATIONS"]},
-		{name = "Automation", title = L["OPTIONS_TABNAME_AUTO"]},
 		{name = "ProfileManagement", title = L["OPTIONS_TABNAME_PROFILES"]},
 		{name = "CreditsFrame", title = L["OPTIONS_TABNAME_CREDITS"]},
 	}, 
@@ -203,7 +203,8 @@ function Plater.OpenOptionsPanel()
 	local uiParentFeatureFrame = mainFrame.AllFrames [4]
 	local scriptingFrame = mainFrame.AllFrames [5]
 	local runCodeFrame = mainFrame.AllFrames [6]
-	local personalPlayerFrame = mainFrame.AllFrames [7]
+	--local personalPlayerFrame = mainFrame.AllFrames [7]
+	local autoFrame = mainFrame.AllFrames [7]
 	local advancedFrame = mainFrame.AllFrames [8]
 	
 	--2nd row
@@ -219,9 +220,8 @@ function Plater.OpenOptionsPanel()
 	--3rd row
 	local colorsFrame = mainFrame.AllFrames [17]
 	local animationFrame = mainFrame.AllFrames [18]
-	local autoFrame = mainFrame.AllFrames [19]
-	local profilesFrame = mainFrame.AllFrames [20]
-	local creditsFrame = mainFrame.AllFrames [21]
+	local profilesFrame = mainFrame.AllFrames [19]
+	local creditsFrame = mainFrame.AllFrames [20]
 	
 	--
 	local colorNpcsButton = mainFrame.AllButtons [17]
@@ -291,9 +291,10 @@ function Plater.OpenOptionsPanel()
 	function f.CopySettings (_, _, from)
 		local currentTab = mainFrame.CurrentIndex
 		local settingsTo
-		if (currentTab == 7) then
+		--[[if (currentTab == 7) then
 			settingsTo = "player"
-		elseif (currentTab == 13) then
+		else--]]
+		if (currentTab == 13) then
 			settingsTo = "enemynpc"
 		elseif (currentTab == 14) then
 			settingsTo = "enemyplayer"
@@ -313,7 +314,7 @@ function Plater.OpenOptionsPanel()
 	end
 	
 	local copy_settings_options = {
-		{label = L["OPTIONS_TABNAME_PERSONAL"], value = "player", onclick = f.CopySettings},
+		--{label = L["OPTIONS_TABNAME_PERSONAL"], value = "player", onclick = f.CopySettings},
 		{label = L["OPTIONS_TABNAME_NPCENEMY"], value = "enemynpc", onclick = f.CopySettings},
 		{label = L["OPTIONS_TABNAME_PLAYERENEMY"], value = "enemyplayer", onclick = f.CopySettings},
 		{label = L["OPTIONS_TABNAME_NPCFRIENDLY"], value = "friendlynpc", onclick = f.CopySettings},
@@ -820,10 +821,10 @@ local interface_options = {
 				end
 			end,
 			min = 1,
-			max = 100,
+			max = 20,
 			step = 1,
 			name = "View Distance" .. CVarIcon,
-			desc = "How far you can see nameplates (in yards).\n\n|cFFFFFFFFDefault: 40|r" .. CVarDesc,
+			desc = "How far you can see nameplates (in yards).\n\n|cFFFFFFFFDefault: 20|r" .. CVarDesc,
 			nocombat = true,
 		},
 	
@@ -3829,6 +3830,7 @@ Plater.CreateAuraTesting()
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- personal player ~player
+-- not supported in classic
 do
 		local on_select_player_percent_text_font = function (_, _, value)
 			Plater.db.profile.plate_config.player.percent_text_font = value
@@ -4944,7 +4946,7 @@ do
 			
 	}
 
-	DF:BuildMenu (personalPlayerFrame, options_personal, startX, startY, heightSize, true, options_text_template, options_dropdown_template, options_switch_template, true, options_slider_template, options_button_template, globalCallback)
+	--DF:BuildMenu (personalPlayerFrame, options_personal, startX, startY, heightSize, true, options_text_template, options_dropdown_template, options_switch_template, true, options_slider_template, options_button_template, globalCallback)
 end
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -10000,7 +10002,6 @@ local relevance_options = {
 	
 	DF:BuildMenu (uiParentFeatureFrame, experimental_options, startX, startY, heightSize, true, options_text_template, options_dropdown_template, options_switch_template, true, options_slider_template, options_button_template, globalCallback)	
 
-	
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --> ~auto ~�uto
 
@@ -10942,7 +10943,8 @@ local relevance_options = {
 		
 		{type = "breakline"},
 		{type = "label", get = function() return "Misc:" end, text_template = DF:GetTemplate ("font", "ORANGE_FONT_TEMPLATE")},
-		
+--[[
+-- currently not supported in classic due to missing API		
 		{
 			type = "toggle",
 			get = function() return Plater.db.profile.show_health_prediction end,
@@ -10961,6 +10963,7 @@ local relevance_options = {
 			name = "Show Shield Prediction",
 			desc = "Show an extra bar for shields (e.g. Power Word: Shield from priests) absorption.",
 		},
+--]]
 		{
 			type = "toggle",
 			get = function() return Plater.db.profile.health_cutoff_extra_glow end,
