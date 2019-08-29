@@ -44,7 +44,6 @@ local mainHeightSize = 800
  --cvars
 local CVAR_ENABLED = "1"
 local CVAR_DISABLED = "0"
-local CVAR_RESOURCEONTARGET = "nameplateResourceOnTarget"
 local CVAR_CULLINGDISTANCE = "nameplateMaxDistance"
 local CVAR_AGGROFLASH = "ShowNamePlateLoseAggroFlash"
 local CVAR_MOVEMENT_SPEED = "nameplateMotionSpeed"
@@ -727,7 +726,7 @@ local nameplate_anchor_options = {
 local interface_options = {
 
 		--{type = "label", get = function() return "Interface Options:" end, text_template = DF:GetTemplate ("font", "ORANGE_FONT_TEMPLATE")},
-
+--[[
 		{
 			type = "toggle",
 			get = function() return GetCVar ("nameplateShowSelf") == CVAR_ENABLED end,
@@ -743,21 +742,18 @@ local interface_options = {
 			desc = "Shows a mini health and mana bars under your character." .. CVarDesc,
 			nocombat = true,
 		},
-		{
+--]]
+--[[		{
 			type = "toggle",
-			get = function() return GetCVar (CVAR_RESOURCEONTARGET) == CVAR_ENABLED end,
+			get = function() return Plater.db.profile.resource_on_target end,
 			set = function (self, fixedparam, value) 
-				if (not InCombatLockdown()) then
-					SetCVar (CVAR_RESOURCEONTARGET, math.abs (tonumber (GetCVar (CVAR_RESOURCEONTARGET))-1))
-				else
-					Plater:Msg (L["OPTIONS_ERROR_CVARMODIFY"])
-					self:SetValue (GetCVar (CVAR_RESOURCEONTARGET) == CVAR_ENABLED)
-				end
+				Plater.db.profile.resource_on_target = value
 			end,
 			name = "Show Resources on Target" .. CVarIcon,
-			desc = "Shows your resource such as combo points above your current target.\n\n'Personal Health and Mana Bars' has to be enabled" .. CVarDesc,
+			desc = "Shows your resource such as combo points above your current target.",
 			nocombat = true,
 		},
+--]]
 		{
 			type = "toggle",
 			get = function() return GetCVar (CVAR_SHOWALL) == CVAR_ENABLED end,

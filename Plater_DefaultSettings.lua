@@ -501,6 +501,8 @@ PLATER_DEFAULT_SETTINGS = {
 		show_health_prediction = false,
 		show_shield_prediction = false,
 		
+		resource_on_target = true,
+		
 		show_interrupt_author = true,
 		
 		--allow scripts to store default values of cvars when they perform automatically changes
