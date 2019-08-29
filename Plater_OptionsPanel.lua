@@ -4953,153 +4953,6 @@ do
 	--DF:BuildMenu (personalPlayerFrame, options_personal, startX, startY, heightSize, true, options_text_template, options_dropdown_template, options_switch_template, true, options_slider_template, options_button_template, globalCallback)
 end
 
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
---> ~auto ~�uto
-
-	--autoFrame
-		
-	local auto_options = {
-		{type = "label", get = function() return "Auto Toggle Friendly Nameplates:" end, text_template = DF:GetTemplate ("font", "ORANGE_FONT_TEMPLATE")},
-		
-		{
-			type = "toggle",
-			get = function() return Plater.db.profile.auto_toggle_friendly_enabled end,
-			set = function (self, fixedparam, value) 
-				Plater.db.profile.auto_toggle_friendly_enabled = value
-				
-				Plater.RefreshDBUpvalues()
-				Plater.UpdateAllPlates()
-				Plater.RefreshAutoToggle()
-			end,
-			name = L["OPTIONS_ENABLED"],
-			desc = "When enabled, Plater will enable or disable friendly plates based on the settings below.",
-		},
-		
-		{
-			type = "toggle",
-			get = function() return Plater.db.profile.auto_toggle_friendly ["party"] end,
-			set = function (self, fixedparam, value) 
-				Plater.db.profile.auto_toggle_friendly ["party"] = value
-				Plater.RefreshAutoToggle()
-			end,
-			name = "In Dungeons",
-			desc = "Show friendly nameplates when inside dungeons.",
-		},	
-		{
-			type = "toggle",
-			get = function() return Plater.db.profile.auto_toggle_friendly ["raid"] end,
-			set = function (self, fixedparam, value) 
-				Plater.db.profile.auto_toggle_friendly ["raid"] = value
-				Plater.RefreshAutoToggle()
-			end,
-			name = "In Raid",
-			desc = "Show friendly nameplates when inside raids.",
-		},
-		{
-			type = "toggle",
-			get = function() return Plater.db.profile.auto_toggle_friendly ["arena"] end,
-			set = function (self, fixedparam, value) 
-				Plater.db.profile.auto_toggle_friendly ["arena"] = value
-				Plater.RefreshAutoToggle()
-			end,
-			name = "In Arena",
-			desc = "Show friendly nameplates when inside arena.",
-		},
-		{
-			type = "toggle",
-			get = function() return Plater.db.profile.auto_toggle_friendly ["cities"] end,
-			set = function (self, fixedparam, value) 
-				Plater.db.profile.auto_toggle_friendly ["cities"] = value
-				Plater.RefreshAutoToggle()
-			end,
-			name = "In Major Cities",
-			desc = "Show friendly nameplates when inside a major city.",
-		},
-		{
-			type = "toggle",
-			get = function() return Plater.db.profile.auto_toggle_friendly ["world"] end,
-			set = function (self, fixedparam, value) 
-				Plater.db.profile.auto_toggle_friendly ["world"] = value
-				Plater.RefreshAutoToggle()
-			end,
-			name = "In Open World",
-			desc = "Show friendly nameplates when at any place not listed on the other options.",
-		},
-		
-		{type = "blank"},
-		
-		{type = "label", get = function() return "Auto Toggle Stacking Nameplates:" end, text_template = DF:GetTemplate ("font", "ORANGE_FONT_TEMPLATE")},
-		
-		{
-			type = "toggle",
-			get = function() return Plater.db.profile.auto_toggle_stacking_enabled end,
-			set = function (self, fixedparam, value) 
-				Plater.db.profile.auto_toggle_stacking_enabled = value
-				
-				Plater.RefreshDBUpvalues()
-				Plater.UpdateAllPlates()
-				Plater.RefreshAutoToggle()
-			end,
-			name = L["OPTIONS_ENABLED"],
-			desc = "When enabled, Plater will enable or disable stacking nameplates based on the settings below.\n\n|cFFFFFF00Important|r: only toggle on if 'Stacking Nameplates' is enabled in the General Settings tab.",
-		},
-		
-		{
-			type = "toggle",
-			get = function() return Plater.db.profile.auto_toggle_stacking ["party"] end,
-			set = function (self, fixedparam, value) 
-				Plater.db.profile.auto_toggle_stacking ["party"] = value
-				Plater.RefreshAutoToggle()
-			end,
-			name = "In Dungeons",
-			desc = "Set stacking on when inside dungeons.",
-		},	
-		{
-			type = "toggle",
-			get = function() return Plater.db.profile.auto_toggle_stacking ["raid"] end,
-			set = function (self, fixedparam, value) 
-				Plater.db.profile.auto_toggle_stacking ["raid"] = value
-				Plater.RefreshAutoToggle()
-			end,
-			name = "In Raid",
-			desc = "Set stacking on when inside raids.",
-		},
-		{
-			type = "toggle",
-			get = function() return Plater.db.profile.auto_toggle_stacking ["arena"] end,
-			set = function (self, fixedparam, value) 
-				Plater.db.profile.auto_toggle_stacking ["arena"] = value
-				Plater.RefreshAutoToggle()
-			end,
-			name = "In Arena",
-			desc = "Set stacking on when inside arena.",
-		},
-		{
-			type = "toggle",
-			get = function() return Plater.db.profile.auto_toggle_stacking ["cities"] end,
-			set = function (self, fixedparam, value) 
-				Plater.db.profile.auto_toggle_stacking ["cities"] = value
-				Plater.RefreshAutoToggle()
-			end,
-			name = "In Major Cities",
-			desc = "Set stacking on when inside a major city.",
-		},
-		{
-			type = "toggle",
-			get = function() return Plater.db.profile.auto_toggle_stacking ["world"] end,
-			set = function (self, fixedparam, value) 
-				Plater.db.profile.auto_toggle_stacking ["world"] = value
-				Plater.RefreshAutoToggle()
-			end,
-			name = "In Open World",
-			desc = "Set stacking on when at any place not listed on the other options.",
-		},
-		
-	}
-	
-	DF:BuildMenu (autoFrame, auto_options, startX, startY, heightSize, true, options_text_template, options_dropdown_template, options_switch_template, true, options_slider_template, options_button_template, globalCallback)	
-
-
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
 --target options
 
@@ -10152,6 +10005,152 @@ local relevance_options = {
 
 	
 	DF:BuildMenu (uiParentFeatureFrame, experimental_options, startX, startY, heightSize, true, options_text_template, options_dropdown_template, options_switch_template, true, options_slider_template, options_button_template, globalCallback)	
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--> ~auto ~�uto
+
+	--autoFrame
+		
+	local auto_options = {
+		{type = "label", get = function() return "Auto Toggle Friendly Nameplates:" end, text_template = DF:GetTemplate ("font", "ORANGE_FONT_TEMPLATE")},
+		
+		{
+			type = "toggle",
+			get = function() return Plater.db.profile.auto_toggle_friendly_enabled end,
+			set = function (self, fixedparam, value) 
+				Plater.db.profile.auto_toggle_friendly_enabled = value
+				
+				Plater.RefreshDBUpvalues()
+				Plater.UpdateAllPlates()
+				Plater.RefreshAutoToggle()
+			end,
+			name = L["OPTIONS_ENABLED"],
+			desc = "When enabled, Plater will enable or disable friendly plates based on the settings below.",
+		},
+		
+		{
+			type = "toggle",
+			get = function() return Plater.db.profile.auto_toggle_friendly ["party"] end,
+			set = function (self, fixedparam, value) 
+				Plater.db.profile.auto_toggle_friendly ["party"] = value
+				Plater.RefreshAutoToggle()
+			end,
+			name = "In Dungeons",
+			desc = "Show friendly nameplates when inside dungeons.",
+		},	
+		{
+			type = "toggle",
+			get = function() return Plater.db.profile.auto_toggle_friendly ["raid"] end,
+			set = function (self, fixedparam, value) 
+				Plater.db.profile.auto_toggle_friendly ["raid"] = value
+				Plater.RefreshAutoToggle()
+			end,
+			name = "In Raid",
+			desc = "Show friendly nameplates when inside raids.",
+		},
+		{
+			type = "toggle",
+			get = function() return Plater.db.profile.auto_toggle_friendly ["arena"] end,
+			set = function (self, fixedparam, value) 
+				Plater.db.profile.auto_toggle_friendly ["arena"] = value
+				Plater.RefreshAutoToggle()
+			end,
+			name = "In Arena",
+			desc = "Show friendly nameplates when inside arena.",
+		},
+		{
+			type = "toggle",
+			get = function() return Plater.db.profile.auto_toggle_friendly ["cities"] end,
+			set = function (self, fixedparam, value) 
+				Plater.db.profile.auto_toggle_friendly ["cities"] = value
+				Plater.RefreshAutoToggle()
+			end,
+			name = "In Major Cities",
+			desc = "Show friendly nameplates when inside a major city.",
+		},
+		{
+			type = "toggle",
+			get = function() return Plater.db.profile.auto_toggle_friendly ["world"] end,
+			set = function (self, fixedparam, value) 
+				Plater.db.profile.auto_toggle_friendly ["world"] = value
+				Plater.RefreshAutoToggle()
+			end,
+			name = "In Open World",
+			desc = "Show friendly nameplates when at any place not listed on the other options.",
+		},
+		
+		{type = "blank"},
+		
+		{type = "label", get = function() return "Auto Toggle Stacking Nameplates:" end, text_template = DF:GetTemplate ("font", "ORANGE_FONT_TEMPLATE")},
+		
+		{
+			type = "toggle",
+			get = function() return Plater.db.profile.auto_toggle_stacking_enabled end,
+			set = function (self, fixedparam, value) 
+				Plater.db.profile.auto_toggle_stacking_enabled = value
+				
+				Plater.RefreshDBUpvalues()
+				Plater.UpdateAllPlates()
+				Plater.RefreshAutoToggle()
+			end,
+			name = L["OPTIONS_ENABLED"],
+			desc = "When enabled, Plater will enable or disable stacking nameplates based on the settings below.\n\n|cFFFFFF00Important|r: only toggle on if 'Stacking Nameplates' is enabled in the General Settings tab.",
+		},
+		
+		{
+			type = "toggle",
+			get = function() return Plater.db.profile.auto_toggle_stacking ["party"] end,
+			set = function (self, fixedparam, value) 
+				Plater.db.profile.auto_toggle_stacking ["party"] = value
+				Plater.RefreshAutoToggle()
+			end,
+			name = "In Dungeons",
+			desc = "Set stacking on when inside dungeons.",
+		},	
+		{
+			type = "toggle",
+			get = function() return Plater.db.profile.auto_toggle_stacking ["raid"] end,
+			set = function (self, fixedparam, value) 
+				Plater.db.profile.auto_toggle_stacking ["raid"] = value
+				Plater.RefreshAutoToggle()
+			end,
+			name = "In Raid",
+			desc = "Set stacking on when inside raids.",
+		},
+		{
+			type = "toggle",
+			get = function() return Plater.db.profile.auto_toggle_stacking ["arena"] end,
+			set = function (self, fixedparam, value) 
+				Plater.db.profile.auto_toggle_stacking ["arena"] = value
+				Plater.RefreshAutoToggle()
+			end,
+			name = "In Arena",
+			desc = "Set stacking on when inside arena.",
+		},
+		{
+			type = "toggle",
+			get = function() return Plater.db.profile.auto_toggle_stacking ["cities"] end,
+			set = function (self, fixedparam, value) 
+				Plater.db.profile.auto_toggle_stacking ["cities"] = value
+				Plater.RefreshAutoToggle()
+			end,
+			name = "In Major Cities",
+			desc = "Set stacking on when inside a major city.",
+		},
+		{
+			type = "toggle",
+			get = function() return Plater.db.profile.auto_toggle_stacking ["world"] end,
+			set = function (self, fixedparam, value) 
+				Plater.db.profile.auto_toggle_stacking ["world"] = value
+				Plater.RefreshAutoToggle()
+			end,
+			name = "In Open World",
+			desc = "Set stacking on when at any place not listed on the other options.",
+		},
+		
+	}
+	
+	DF:BuildMenu (autoFrame, auto_options, startX, startY, heightSize, true, options_text_template, options_dropdown_template, options_switch_template, true, options_slider_template, options_button_template, globalCallback)	
 	
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --> credits
