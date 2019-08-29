@@ -2353,6 +2353,7 @@ Plater.DefaultSpellRangeList = {
 				plateFrame.unitFrame.healthBar.border = healthBarBorder
 				
 				local powerBarBorder = CreateFrame ("frame", nil, plateFrame.unitFrame.powerBar, "PlaterNamePlateFullBorderTemplate")
+				plateFrame.unitFrame.powerBar.border = powerBarBorder
 				powerBarBorder:SetVertexColor (0, 0, 0, 1)
 			
 			--> focus indicator
