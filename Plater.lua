@@ -71,6 +71,8 @@ local UnitIsQuestBoss = UnitIsQuestBoss or function() return false end
 
 local LibSharedMedia = LibStub:GetLibrary ("LibSharedMedia-3.0")
 local LCG = LibStub:GetLibrary("LibCustomGlow-1.0")
+local LCD = LibStub:GetLibrary("LibClassicDurations")
+LCD:Register("Plater")
 local _
 
 local Plater = DF:CreateAddOn ("Plater", "PlaterDB", PLATER_DEFAULT_SETTINGS, { --options table
@@ -4562,6 +4564,14 @@ end
 				if (not name) then
 					break
 				else
+				
+					--> try getting correct aura times for classic
+					local durationNew, expirationTimeNew = LCD:GetAuraDurationByUnit(unit, spellId, caster, name)
+					if duration == 0 and durationNew then
+						duration = durationNew
+						expirationTime = expirationTimeNew
+					end
+					
 					local auraType = "BUFF"
 					--verify is this aura is in the table passed
 					if (aurasToCheck [name]) then
@@ -4594,6 +4604,14 @@ end
 				if (not name) then
 					break
 				else
+					
+					--> try getting correct aura times for classic
+					local durationNew, expirationTimeNew = LCD:GetAuraDurationByUnit(unit, spellId, caster, name)
+					if duration == 0 and durationNew then
+						duration = durationNew
+						expirationTime = expirationTimeNew
+					end
+					
 					local auraType = "DEBUFF"
 					--checking here if the debuff is placed by the player
 					--if (caster and aurasToCheck [name] and UnitIsUnit (caster, "player")) then --this doesn't track the pet, so auras like freeze from mage frost elemental won't show
@@ -4649,9 +4667,17 @@ end
 				
 				if (not name) then
 					break
+				end
+				
+				--> try getting correct aura times for classic
+				local durationNew, expirationTimeNew = LCD:GetAuraDurationByUnit(unit, spellId, caster, name)
+				if duration == 0 and durationNew then
+					duration = durationNew
+					expirationTime = expirationTimeNew
+				end
 				
 				--check if the debuff isn't filtered out
-				elseif (not DB_DEBUFF_BANNED [name]) then
+				if (not DB_DEBUFF_BANNED [name]) then
 			
 					--> if true it'll show all auras - this can be called from scripts to debug aura things
 					if (Plater.DebugAuras) then
@@ -4702,6 +4728,13 @@ end
 				
 				if (not name) then
 					break
+				end
+				
+				--> try getting correct aura times for classic
+				local durationNew, expirationTimeNew = LCD:GetAuraDurationByUnit(unit, spellId, caster, name)
+				if duration == 0 and durationNew then
+					duration = durationNew
+					expirationTime = expirationTimeNew
 				end
 				
 				--> check for special auras added by the user it self
@@ -4775,8 +4808,16 @@ end
 				
 				if (not name) then
 					break
+				end
+				
+				--> try getting correct aura times for classic
+				local durationNew, expirationTimeNew = LCD:GetAuraDurationByUnit("player", spellId, caster, name)
+				if duration == 0 and durationNew then
+					duration = durationNew
+					expirationTime = expirationTimeNew
+				end
 					
-				elseif (not DB_DEBUFF_BANNED [name]) then
+				if (not DB_DEBUFF_BANNED [name]) then
 					local auraIconFrame, buffFrame = Plater.GetAuraIcon (self)
 					Plater.AddAura (buffFrame, auraIconFrame, i, name, texture, count, auraType, duration, expirationTime, caster, canStealOrPurge, nameplateShowPersonal, spellId, false, false, true, true, actualAuraType)
 					
@@ -4804,9 +4845,17 @@ end
 				
 				if (not name) then
 					break
+				end
+				
+				--> try getting correct aura times for classic
+				local durationNew, expirationTimeNew = LCD:GetAuraDurationByUnit("player", spellId, caster, name)
+				if duration == 0 and durationNew then
+					duration = durationNew
+					expirationTime = expirationTimeNew
+				end
 					
 				--> only show buffs casted by the player it self and less than 1 minute in duration
-				elseif (not DB_BUFF_BANNED [name] and (duration and (duration > 0 and duration < 60)) and (caster and UnitIsUnit (caster, "player"))) then
+				if (not DB_BUFF_BANNED [name] and (duration and (duration > 0 and duration < 60)) and (caster and UnitIsUnit (caster, "player"))) then
 					local auraIconFrame, buffFrame = Plater.GetAuraIcon (self, true)
 					Plater.AddAura (buffFrame, auraIconFrame, i, name, texture, count, auraType, duration, expirationTime, caster, canStealOrPurge, nameplateShowPersonal, spellId, false, false, false, true, actualAuraType)
 
