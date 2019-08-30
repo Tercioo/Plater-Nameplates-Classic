@@ -3627,8 +3627,14 @@ function Plater.OnInit() --private
 	--> health frame
 
 	function Plater.QuickHealthUpdate (unitFrame)
-		local unitHealth = UnitHealth (unitFrame.unit)
-		local unitHealthMax = UnitHealthMax (unitFrame.unit)
+		local unitHealth = 0
+		local unitHealthMax = 0
+		if RealMobHealth then
+			unitHealth, unitHealthMax = RealMobHealth.GetUnitHealth(unitFrame.unit)
+		else
+			unitHealth = UnitHealth (unitFrame.unit)
+			unitHealthMax = UnitHealthMax (unitFrame.unit)
+		end
 		unitFrame.healthBar:SetMinMaxValues (0, unitHealthMax)
 		unitFrame.healthBar:SetValue (unitHealth)
 		

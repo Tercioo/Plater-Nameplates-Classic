@@ -6818,8 +6818,12 @@ DF.HealthFrameFunctions = {
 
 			--> register events
 			if (unit) then
-				self.currentHealth = UnitHealth (unit) or 0
-				self.currentHealthMax = UnitHealthMax (unit) or 0
+				if RealMobHealth then
+					self.currentHealth, self.currentHealthMax = RealMobHealth.GetUnitHealth(unit)
+				else
+					self.currentHealth = UnitHealth (unit) or 0
+					self.currentHealthMax = UnitHealthMax (unit) or 0
+				end
 				
 				for _, eventTable in ipairs (self.HealthBarEvents) do
 					local event = eventTable [1]
@@ -6914,13 +6918,23 @@ DF.HealthFrameFunctions = {
 
 	--colocar mais coisas aqui, um member dizendo quanto de health e o health max da unit
 	UpdateMaxHealth = function (self)
-			local maxHealth = UnitHealthMax (self.displayedUnit)
+			local maxHealth, _ = 0
+			if RealMobHealth then
+				_,  maxHealth = RealMobHealth.GetUnitHealth(self.displayedUnit)
+			else
+				maxHealth, _ = UnitHealthMax (self.displayedUnit)
+			end
 			self:SetMinMaxValues (0, maxHealth)
 			self.currentHealthMax = maxHealth
 	end,
 
 	UpdateHealth = function (self)
-		local health = UnitHealth (self.displayedUnit)
+		local health = 0
+		if RealMobHealth then
+			health = RealMobHealth.GetUnitHealth(self.displayedUnit)
+		else
+			health = UnitHealth (self.displayedUnit)
+		end
 		self.currentHealth = health
 		DFPixelUtil.SetStatusBarValue (self, health)
 	end,
