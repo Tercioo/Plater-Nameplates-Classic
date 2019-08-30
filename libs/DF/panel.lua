@@ -5848,7 +5848,7 @@ function DF:PassLoadFilters (loadTable, encounterID)
 	end
 	
 	--affix
-	if (loadTable.affix.Enabled) then
+	if (loadTable.affix.Enabled and false) then --dont need to run on classic
 		local isInMythicDungeon = C_ChallengeMode.IsChallengeModeActive()
 		if (not isInMythicDungeon) then
 			return false

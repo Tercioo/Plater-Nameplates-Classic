@@ -937,7 +937,9 @@ Plater.DefaultSpellRangeList = {
 
 	--return true if the unit is in tank role
 	local function IsUnitEffectivelyTank (unit)
-		return UnitGroupRolesAssigned (unit) == "TANK"
+		--todo: need some thing here
+		--return UnitGroupRolesAssigned (unit) == "TANK"
+
 	end
 	
 	--iterate among group members and store the names of all tanks in the group
