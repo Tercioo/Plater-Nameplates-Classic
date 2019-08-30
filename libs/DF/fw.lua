@@ -1,5 +1,5 @@
 
-local dversion = 203
+local dversion = 204
 local major, minor = "DetailsFramework-1.0", dversion
 local DF, oldminor = LibStub:NewLibrary (major, minor)
 
@@ -26,9 +26,8 @@ DF.AuthorInfo = {
 }
 
 function DF.IsClassicWow()
-	--WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
 	local gameVersion = GetBuildInfo()
-	if (gameVersion:match ("%d") == "1") then
+	if (gameVersion:match ("%d") == "1" or WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) then
 		return true
 	end
 	return false
