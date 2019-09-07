@@ -1760,6 +1760,21 @@ Plater.DefaultSpellRangeList = {
 
 		FRIENDLIST_UPDATE = function()
 			wipe (Plater.FriendsCache)
+			
+			for i = 1, C_FriendList.GetNumFriends() do
+				local info = C_FriendList.GetFriendInfoByIndex (i)
+				if (info.connected and info.name) then
+					Plater.FriendsCache [info.name] = true
+					Plater.FriendsCache [DF:RemoveRealmName (info.name)] = true
+				end
+			end
+			for i = 1, BNGetNumFriends() do 
+				local presenceID, presenceName, battleTag, isBattleTagPresence, toonName, toonID, client, isOnline, lastOnline, isAFK, isDND, messageText, noteText, isRIDFriend, broadcastTime, canSoR = BNGetFriendInfo (i)
+				if (isOnline and toonName) then
+					Plater.FriendsCache [toonName] = true
+				end
+			end
+			
 			--let's not trigger a full update on all plates because a friend is now online
 			--Plater.UpdateAllPlates()
 		end,
@@ -2934,6 +2949,7 @@ function Plater.OnInit() --private
 		Plater.EventHandlerFrame:RegisterEvent ("ZONE_CHANGED_NEW_AREA")
 		Plater.EventHandlerFrame:RegisterEvent ("ZONE_CHANGED_INDOORS")
 		Plater.EventHandlerFrame:RegisterEvent ("ZONE_CHANGED")
+		Plater.EventHandlerFrame:RegisterEvent ("FRIENDLIST_UPDATE")
 		Plater.EventHandlerFrame:RegisterEvent ("PLAYER_LOGOUT")
 		Plater.EventHandlerFrame:RegisterEvent ("PLAYER_UPDATE_RESTING")
 		Plater.EventHandlerFrame:RegisterEvent ("RAID_TARGET_UPDATE")
