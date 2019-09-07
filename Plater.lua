@@ -917,10 +917,11 @@ Plater.DefaultSpellRangeList = {
 
 	--> execute after player logon or when the player changes its spec
 	function Plater.GetSpellForRangeCheck()
-
+		Plater.SpellBookForRangeCheck = nil
+		Plater.SpellForRangeCheck = PlaterDBChr.spellRangeCheck
+		
 		--no classic
-		if (true) then return end
-
+		--if (true) then return end
 	end	
 
 	-- ~tank --todo: make these functions be inside the Plater object
@@ -2838,14 +2839,10 @@ function Plater.OnInit() --private
 		PlaterDBChr.first_run3 = PlaterDBChr.first_run3 or {}
 		PlaterDBChr.debuffsBanned = PlaterDBChr.debuffsBanned or {}
 		PlaterDBChr.buffsBanned = PlaterDBChr.buffsBanned or {}
-		PlaterDBChr.spellRangeCheck = PlaterDBChr.spellRangeCheck or {}
+		PlaterDBChr.spellRangeCheck = PlaterDBChr.spellRangeCheck or ""
 	
 	--range check spells
-		for specID, _ in pairs (Plater.SpecList [select (2, UnitClass ("player"))]) do
-			if (PlaterDBChr.spellRangeCheck [specID] == nil) then
-				PlaterDBChr.spellRangeCheck [specID] = GetSpellInfo (Plater.DefaultSpellRangeList [specID])
-			end
-		end
+		--PlaterDBChr.spellRangeCheck = GetSpellInfo (Plater.DefaultSpellRangeList)
 		Plater.SpellForRangeCheck = ""
 	
 	--who is the player

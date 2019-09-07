@@ -5385,37 +5385,31 @@ local relevance_options = {
 		for j = offset, tabEnd - 1 do
 			local spellType, spellID = GetSpellBookItemInfo (j, "player")
 			if (spellType == "SPELL") then
-				tinsert (spells, spellID)
+				spells[GetSpellInfo (spellID)] = spellID
 			end
 		end
 	end
 	
-	local playerSpecs = Plater.SpecList [select (2, UnitClass ("player"))]
-	local i = 1
-	for specID, _ in pairs (playerSpecs) do
-		--[=[
-		local spec_id, spec_name, spec_description, spec_icon, spec_background, spec_role, spec_class = GetSpecializationInfoByID (specID)
-		tinsert (options_table1, {
-			type = "select",
-			get = function() return PlaterDBChr.spellRangeCheck [specID] end,
-			values = function() 
-				local onSelectFunc = function (_, _, spellName)
-					PlaterDBChr.spellRangeCheck [specID] = spellName
-					Plater.GetSpellForRangeCheck()
-				end
-				local t = {}
-				for _, spellID in ipairs (spells) do
-					local spellName, _, spellIcon = GetSpellInfo (spellID)
+	tinsert (options_table1, {
+		type = "select",
+		get = function() return PlaterDBChr.spellRangeCheck end,
+		values = function() 
+			local onSelectFunc = function (_, _, spellName)
+				PlaterDBChr.spellRangeCheck = spellName
+				Plater.GetSpellForRangeCheck()
+			end
+			local t = {}
+			for _, spellID in pairs (spells) do
+				local spellName, rank, spellIcon, castTime, minRange, maxRange, spellId = GetSpellInfo(spellID)
+				if maxRange > 0 then
 					tinsert (t, {label = spellName, icon = spellIcon, onclick = onSelectFunc, value = spellName})
 				end
-				return t
-			end,
-			name = "|T" .. spec_icon .. ":16:16|t " .. L["OPTIONS_GENERALSETTINGS_TRANSPARENCY_RANGECHECK"],
-			desc = L["OPTIONS_GENERALSETTINGS_TRANSPARENCY_RANGECHECK_SPEC_DESC"],
-		})
-		--]=]
-		i = i + 1
-	end	
+			end
+			return t
+		end,
+		name = L["OPTIONS_GENERALSETTINGS_TRANSPARENCY_RANGECHECK"],
+		desc = L["OPTIONS_GENERALSETTINGS_TRANSPARENCY_RANGECHECK_SPEC_DESC"],
+	})
 
 	local options_table1_continue = {
 	
