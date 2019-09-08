@@ -1,5 +1,5 @@
 local MAJOR_VERSION = "ThreatClassic-1.0"
-local MINOR_VERSION = 4
+local MINOR_VERSION = 2
 local tconcat = _G.table.concat
 local tostring = _G.tostring
 local error = _G.error
@@ -269,10 +269,25 @@ ThreatLib_funcs[#ThreatLib_funcs + 1] = function()
 			return 6603
 		-- get spellID from auras
 		elseif auraType and unit then
+			local name, sid
 			if auraType == AURA_TYPE_DEBUFF then
-				return select(10, AuraUtil.FindAuraByName(spellName, unit, "HARMFUL")) or 0
+				for i = 1, 16 do
+					name, _, _, _, _, _, _, _, _, _, sid = UnitAura(unit, i, "HARMFUL")
+					if not name then
+						break
+					elseif name == spellName then
+						return sid
+					end
+				end
 			else
-				return select(10, AuraUtil.FindAuraByName(spellName, unit)) or 0
+				for i = 1, 40 do
+					name, _, _, _, _, _, _, _, _, _, sid = UnitAura(unit, i)
+					if not name then
+						break
+					elseif name == spellName then
+						return sid
+					end
+				end
 			end
 		-- get spellID from cache/spellbook
 		else
