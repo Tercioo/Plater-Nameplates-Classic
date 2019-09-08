@@ -2385,6 +2385,7 @@ PLATER_DEFAULT_SETTINGS = {
 		},
 		
 		aggro_can_check_notank = false,
+		tank_threat_colors = false,
 		
 		tank = {
 			colors = {

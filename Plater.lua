@@ -945,11 +945,22 @@ Plater.DefaultSpellRangeList = {
 
 	end
 	
+	-- toggle Threat Color Mode between tank / dps
+	function Plater.ToggleThreatColorMode()
+		Plater.db.profile.tank_threat_colors = not Plater.db.profile.tank_threat_colors
+		Plater.RefreshTankCache()
+		if Plater.PlayerIsTank then
+			print("Plater: Using Tank Threat Colors")
+		else
+			print("Plater: Using DPS Threat Colors")
+		end
+	end
+	
 	--iterate among group members and store the names of all tanks in the group
 	--this is called when the player enter, leave or when the group roster is changed
 	--tank cache is used mostly in the aggro check to know if the player is a tank
 	function Plater.RefreshTankCache() --private
-		Plater.PlayerIsTank = false
+		Plater.PlayerIsTank = Plater.db.profile.tank_threat_colors
 	
 		wipe (TANK_CACHE)
 		
