@@ -5526,8 +5526,8 @@ end
 		end
 		
 		--todo: threat on classic
+		self.InCombat = UnitAffectingCombat (self.displayedUnit)
 		local isTanking, threatStatus, threatpct = UnitDetailedThreatSituation ("player", self.displayedUnit)
-		--local isTanking, threatStatus, threatpct = false, 0, 0
 
 		
 		--expose all threat situation to scripts
@@ -5647,7 +5647,7 @@ end
 					Plater.CheckRange (self.PlateFrame, true)
 				end
 			else 	
-				if (threatStatus == nil) then
+				if (threatpct == nil) then
 					self.PlateFrame.playerHasAggro = false
 					
 					--> unit is in combat?
