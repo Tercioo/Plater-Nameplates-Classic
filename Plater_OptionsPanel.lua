@@ -5378,11 +5378,10 @@ local relevance_options = {
 	
 	local spells = {}
 	local offset
-	for i = 2, GetNumSpellTabs() do
+	for i = 1, GetNumSpellTabs() do
 		local name, texture, offset, numEntries, isGuild, offspecID = GetSpellTabInfo (i)
 		local tabEnd = offset + numEntries
-		offset = offset + 1
-		for j = offset, tabEnd - 1 do
+		for j = offset + 1, tabEnd do
 			local spellType, spellID = GetSpellBookItemInfo (j, "player")
 			if (spellType == "SPELL") then
 				spells[GetSpellInfo (spellID)] = spellID

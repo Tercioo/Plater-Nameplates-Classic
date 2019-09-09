@@ -843,69 +843,71 @@ Plater.DefaultSpellRangeList = {
 			return
 		end
 		
-		--check when the unit just has been added to the screen
-		if (onAdded) then
-			--range check when the nameplate is added
-			if (Plater.SpellBookForRangeCheck) then
-				if (IsSpellInRange (Plater.SpellForRangeCheck, Plater.SpellBookForRangeCheck, plateFrame [MEMBER_UNITID]) == 1) then
-					plateFrame.FadedIn = true
-					local alpha = Plater.GetPlateAlpha (plateFrame)
-					plateFrame.unitFrame:SetAlpha (alpha)
-					plateFrame [MEMBER_ALPHA] = alpha
-					plateFrame [MEMBER_RANGE] = true
-					plateFrame.unitFrame [MEMBER_RANGE] = true
-				else
-					plateFrame.FadedIn = nil
-					local alpha = Plater.db.profile.range_check_alpha
-					plateFrame.unitFrame:SetAlpha (alpha)
-					plateFrame [MEMBER_ALPHA] = alpha
-					plateFrame [MEMBER_RANGE] = false
-					plateFrame.unitFrame [MEMBER_RANGE] = false
-				end
-			else
-				if (IsSpellInRange (Plater.SpellForRangeCheck, plateFrame [MEMBER_UNITID]) == 1) then
-					plateFrame.FadedIn = true
-					local alpha = Plater.GetPlateAlpha (plateFrame)
-					plateFrame.unitFrame:SetAlpha (alpha)
-					plateFrame [MEMBER_ALPHA] = alpha
-					plateFrame [MEMBER_RANGE] = true
-					plateFrame.unitFrame [MEMBER_RANGE] = true
-				else
-					plateFrame.FadedIn = nil
-					local alpha = Plater.db.profile.range_check_alpha
-					plateFrame.unitFrame:SetAlpha (alpha)
-					plateFrame [MEMBER_ALPHA] = alpha
-					plateFrame [MEMBER_RANGE] = false
-					plateFrame.unitFrame [MEMBER_RANGE] = false
-				end
-			end
-		else
-			--regular range check during throttled tick
-			if (Plater.SpellBookForRangeCheck) then
-				--using a spell book spell index for the range check, this is disabled at the moment in the function below
-				if (IsSpellInRange (Plater.SpellForRangeCheck, Plater.SpellBookForRangeCheck, plateFrame [MEMBER_UNITID]) == 1) then
-					if (not plateFrame.FadedIn and not plateFrame.unitFrame.FadeIn.playing) then
-						plateFrame:RangeFadeIn()
+		if (not (Plater.SpellForRangeCheck == nil or Plater.SpellForRangeCheck == '')) then
+			--check when the unit just has been added to the screen
+			if (onAdded) then
+				--range check when the nameplate is added
+				if (Plater.SpellBookForRangeCheck) then
+					if (IsSpellInRange (Plater.SpellForRangeCheck, Plater.SpellBookForRangeCheck, plateFrame [MEMBER_UNITID]) == 1) then
+						plateFrame.FadedIn = true
+						local alpha = Plater.GetPlateAlpha (plateFrame)
+						plateFrame.unitFrame:SetAlpha (alpha)
+						plateFrame [MEMBER_ALPHA] = alpha
+						plateFrame [MEMBER_RANGE] = true
+						plateFrame.unitFrame [MEMBER_RANGE] = true
+					else
+						plateFrame.FadedIn = nil
+						local alpha = Plater.db.profile.range_check_alpha
+						plateFrame.unitFrame:SetAlpha (alpha)
+						plateFrame [MEMBER_ALPHA] = alpha
+						plateFrame [MEMBER_RANGE] = false
+						plateFrame.unitFrame [MEMBER_RANGE] = false
 					end
 				else
-					if (plateFrame.FadedIn and not plateFrame.unitFrame.FadeOut.playing) then
-						plateFrame:RangeFadeOut()
+					if (IsSpellInRange (Plater.SpellForRangeCheck, plateFrame [MEMBER_UNITID]) == 1) then
+						plateFrame.FadedIn = true
+						local alpha = Plater.GetPlateAlpha (plateFrame)
+						plateFrame.unitFrame:SetAlpha (alpha)
+						plateFrame [MEMBER_ALPHA] = alpha
+						plateFrame [MEMBER_RANGE] = true
+						plateFrame.unitFrame [MEMBER_RANGE] = true
+					else
+						plateFrame.FadedIn = nil
+						local alpha = Plater.db.profile.range_check_alpha
+						plateFrame.unitFrame:SetAlpha (alpha)
+						plateFrame [MEMBER_ALPHA] = alpha
+						plateFrame [MEMBER_RANGE] = false
+						plateFrame.unitFrame [MEMBER_RANGE] = false
 					end
 				end
 			else
-				--using a spell name for the range check
-				if (IsSpellInRange (Plater.SpellForRangeCheck, plateFrame [MEMBER_UNITID]) == 1) then
-					if (not plateFrame.FadedIn and not plateFrame.unitFrame.FadeIn.playing) then
-						plateFrame:RangeFadeIn()
+				--regular range check during throttled tick
+				if (Plater.SpellBookForRangeCheck) then
+					--using a spell book spell index for the range check, this is disabled at the moment in the function below
+					if (IsSpellInRange (Plater.SpellForRangeCheck, Plater.SpellBookForRangeCheck, plateFrame [MEMBER_UNITID]) == 1) then
+						if (not plateFrame.FadedIn and not plateFrame.unitFrame.FadeIn.playing) then
+							plateFrame:RangeFadeIn()
+						end
+					else
+						if (plateFrame.FadedIn and not plateFrame.unitFrame.FadeOut.playing) then
+							plateFrame:RangeFadeOut()
+						end
 					end
-					plateFrame [MEMBER_RANGE] = true
-					plateFrame.unitFrame [MEMBER_RANGE] = true
 				else
-					if (plateFrame.FadedIn and not plateFrame.unitFrame.FadeOut.playing) then
-						plateFrame:RangeFadeOut()
+					--using a spell name for the range check
+					if (IsSpellInRange (Plater.SpellForRangeCheck, plateFrame [MEMBER_UNITID]) == 1) then
+						if (not plateFrame.FadedIn and not plateFrame.unitFrame.FadeIn.playing) then
+							plateFrame:RangeFadeIn()
+						end
+						plateFrame [MEMBER_RANGE] = true
+						plateFrame.unitFrame [MEMBER_RANGE] = true
+					else
+						if (plateFrame.FadedIn and not plateFrame.unitFrame.FadeOut.playing) then
+							plateFrame:RangeFadeOut()
+						end
+						plateFrame [MEMBER_RANGE] = false
+						plateFrame.unitFrame [MEMBER_RANGE] = false
 					end
-					plateFrame [MEMBER_RANGE] = false
-					plateFrame.unitFrame [MEMBER_RANGE] = false
 				end
 			end
 		end
@@ -2853,8 +2855,11 @@ function Plater.OnInit() --private
 		PlaterDBChr.spellRangeCheck = PlaterDBChr.spellRangeCheck or ""
 	
 	--range check spells
+		if type(PlaterDBChr.spellRangeCheck) == "table" then
+			PlaterDBChr.spellRangeCheck = nil
+		end
 		--PlaterDBChr.spellRangeCheck = GetSpellInfo (Plater.DefaultSpellRangeList)
-		Plater.SpellForRangeCheck = ""
+		Plater.SpellForRangeCheck = nil
 	
 	--who is the player
 		Plater.PlayerGUID = UnitGUID ("player")
@@ -9031,21 +9036,23 @@ end
 		if (spellName) then
 			return IsSpellInRange (spellName, unitFrame [MEMBER_UNITID]) == 1
 			
-		elseif (Plater.SpellBookForRangeCheck) then
-			if (IsSpellInRange (Plater.SpellForRangeCheck, Plater.SpellBookForRangeCheck, unitFrame [MEMBER_UNITID]) == 1) then
-				unitFrame [MEMBER_RANGE] = true
-				return true
+		elseif (not (Plater.SpellForRangeCheck == nil or Plater.SpellForRangeCheck == '')) then
+			if (Plater.SpellBookForRangeCheck) then
+				if (IsSpellInRange (Plater.SpellForRangeCheck, Plater.SpellBookForRangeCheck, unitFrame [MEMBER_UNITID]) == 1) then
+					unitFrame [MEMBER_RANGE] = true
+					return true
+				else
+					unitFrame [MEMBER_RANGE] = false
+					return false
+				end
 			else
-				unitFrame [MEMBER_RANGE] = false
-				return false
-			end
-		else
-			if (IsSpellInRange (Plater.SpellForRangeCheck, unitFrame [MEMBER_UNITID]) == 1) then
-				unitFrame [MEMBER_RANGE] = true
-				return true
-			else
-				unitFrame [MEMBER_RANGE] = false
-				return false
+				if (IsSpellInRange (Plater.SpellForRangeCheck, unitFrame [MEMBER_UNITID]) == 1) then
+					unitFrame [MEMBER_RANGE] = true
+					return true
+				else
+					unitFrame [MEMBER_RANGE] = false
+					return false
+				end
 			end
 		end
 	end
