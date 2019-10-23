@@ -5138,7 +5138,7 @@ end
 			--health bar
 				-- ensure that we are using the configured size, as it will be automatically scaled
 				healthBar:ClearAllPoints()
-				DFPixelUtil.SetPoint (healthBar, "center", unitFrame, "center", 0, 0)
+				DFPixelUtil.SetPoint (healthBar, "center", unitFrame, "center", profile.global_offset_x, profile.global_offset_y)
 				DFPixelUtil.SetSize (healthBar, healthBarWidth, healthBarHeight)
 		--end of patch
 			--update scale
