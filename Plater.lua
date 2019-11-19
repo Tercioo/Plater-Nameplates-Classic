@@ -47,9 +47,6 @@ local InCombatLockdown = InCombatLockdown
 local UnitIsPlayer = UnitIsPlayer
 local UnitClassification = UnitClassification
 --local UnitDetailedThreatSituation = UnitDetailedThreatSituation
---local UnitAura = UnitAura
---local UnitBuff = UnitBuff
---local UnitDebuff = UnitDebuff
 local UnitCanAttack = UnitCanAttack
 local IsSpellInRange = IsSpellInRange
 local abs = math.abs
@@ -72,10 +69,6 @@ local UnitIsQuestBoss = UnitIsQuestBoss or function() return false end
 local LibSharedMedia = LibStub:GetLibrary ("LibSharedMedia-3.0")
 local LCG = LibStub:GetLibrary("LibCustomGlow-1.0")
 
-local LCD = LibStub:GetLibrary("LibClassicDurations")
-LCD:Register("Plater")
-LCD.RegisterCallback("Plater", "UNIT_BUFF", function(event, unit)end)
-
 local _
 
 local Plater = DF:CreateAddOn ("Plater", "PlaterDB", PLATER_DEFAULT_SETTINGS, { --options table
@@ -85,6 +78,14 @@ local Plater = DF:CreateAddOn ("Plater", "PlaterDB", PLATER_DEFAULT_SETTINGS, { 
 		
 	}
 })
+
+local UnitAura = _G.UnitAura
+local LCD = LibStub:GetLibrary("LibClassicDurations", true)
+if LCD then
+	LCD:Register(Plater)
+	LCD.RegisterCallback(Plater, "UNIT_BUFF", function(event, unit)end)
+	UnitAura = LCD.UnitAuraWithBuffs
+end
 
 --threat stuff from: https://github.com/EsreverWoW/ClassicThreatMeter by EsreverWoW
 local ThreatLib = LibStub:GetLibrary ("ThreatClassic-1.0")
@@ -4600,7 +4601,7 @@ end
 		if (isBuff) then
 			--> buffs
 			for i = 1, BUFF_MAX_DISPLAY do
-				local name, texture, count, actualAuraType, duration, expirationTime, caster, canStealOrPurge, nameplateShowPersonal, spellId = LCD:UnitAura(unit, i, "HELPFUL")
+				local name, texture, count, actualAuraType, duration, expirationTime, caster, canStealOrPurge, nameplateShowPersonal, spellId = UnitAura(unit, i, "HELPFUL")
 				if (not name) then
 					break
 				else
@@ -4633,7 +4634,7 @@ end
 			for i = 1, BUFF_MAX_DISPLAY do
 				--using the PLAYER filter it'll avoid special auras to be scan
 				--local name, texture, count, auraType, duration, expirationTime, caster, canStealOrPurge, nameplateShowPersonal, spellId = UnitDebuff (unit, i, "HARMFUL|PLAYER")
-				local name, texture, count, actualAuraType, duration, expirationTime, caster, canStealOrPurge, nameplateShowPersonal, spellId = LCD:UnitAura(unit, i, "HARMFUL")
+				local name, texture, count, actualAuraType, duration, expirationTime, caster, canStealOrPurge, nameplateShowPersonal, spellId = UnitAura(unit, i, "HARMFUL")
 				if (not name) then
 					break
 				else
@@ -4688,7 +4689,7 @@ end
 			for i = 1, BUFF_MAX_DISPLAY do
 			
 				--todo: fix the variable name inconsistence, here the buff name is called "spellName" in the other loop below is called "name"
-				local name, texture, count, actualAuraType, duration, expirationTime, caster, canStealOrPurge, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, isCastByPlayer, nameplateShowAll = LCD:UnitAura(unit, i, "HARMFUL")
+				local name, texture, count, actualAuraType, duration, expirationTime, caster, canStealOrPurge, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, isCastByPlayer, nameplateShowAll = UnitAura(unit, i, "HARMFUL")
 				--start as false, during the checks can be changed to true, if is true this debuff is added on the nameplate
 				local can_show_this_debuff
 				local auraType = "DEBUFF"
@@ -4744,7 +4745,7 @@ end
 		
 		--> buffs
 			for i = 1, BUFF_MAX_DISPLAY do
-				local name, texture, count, actualAuraType, duration, expirationTime, caster, canStealOrPurge, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, isCastByPlayer, nameplateShowAll = LCD:UnitAura(unit, i, "HELPFUL")
+				local name, texture, count, actualAuraType, duration, expirationTime, caster, canStealOrPurge, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, isCastByPlayer, nameplateShowAll = UnitAura(unit, i, "HELPFUL")
 				local auraType = "BUFF"
 				
 				if (not name) then
@@ -4822,7 +4823,7 @@ end
 		--> debuffs
 		if (Plater.db.profile.aura_show_debuffs_personal) then
 			for i = 1, BUFF_MAX_DISPLAY do
-				local name, texture, count, actualAuraType, duration, expirationTime, caster, canStealOrPurge, nameplateShowPersonal, spellId = LCD:UnitAura(unit, i, "HARMFUL")
+				local name, texture, count, actualAuraType, duration, expirationTime, caster, canStealOrPurge, nameplateShowPersonal, spellId = UnitAura(unit, i, "HARMFUL")
 				local auraType = "DEBUFF"
 				
 				if (not name) then
@@ -4852,7 +4853,7 @@ end
 		--> buffs
 		if (Plater.db.profile.aura_show_buffs_personal) then
 			for i = 1, BUFF_MAX_DISPLAY do
-				local name, texture, count, actualAuraType, duration, expirationTime, caster, canStealOrPurge, nameplateShowPersonal, spellId = LCD:UnitAura(unit, i, "HELPFUL")
+				local name, texture, count, actualAuraType, duration, expirationTime, caster, canStealOrPurge, nameplateShowPersonal, spellId = UnitAura(unit, i, "HELPFUL")
 				local auraType = "BUFF"
 				
 				if (not name) then
