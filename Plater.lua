@@ -79,6 +79,7 @@ local Plater = DF:CreateAddOn ("Plater", "PlaterDB", PLATER_DEFAULT_SETTINGS, { 
 	}
 })
 
+-- support for LibClassicDurations from https://github.com/rgd87/LibClassicDurations by d87
 local UnitAura = _G.UnitAura
 local LCD = LibStub:GetLibrary("LibClassicDurations", true)
 if LCD then
