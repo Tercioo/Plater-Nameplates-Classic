@@ -1627,6 +1627,18 @@ local debuff_options = {
 		name = "Show Buffs Casted by the Unit",
 		desc = "Show Buffs Casted by the Unit it self",
 	},
+
+	{
+		type = "toggle",
+		get = function() return Plater.db.profile.aura_show_enemy_buffs end,
+		set = function (self, fixedparam, value) 
+			Plater.db.profile.aura_show_enemy_buffs = value
+			Plater.RefreshDBUpvalues()
+			Plater.UpdateAllPlates()
+		end,
+		name = "Show all enemy Buffs",
+		desc = "Show all Buffs on the enemy unit.\nTo track single buffs only, add them to the Buff Tracking white list.",
+	},
 	--border color is buff
 	{
 		type = "color",
