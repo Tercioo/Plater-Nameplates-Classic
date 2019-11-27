@@ -933,24 +933,38 @@ Plater.DefaultSpellRangeList = {
 	end	
 
 	-- ~tank --todo: make these functions be inside the Plater object
-	--true if the 'player' unit is a tank
-	local function IsPlayerEffectivelyTank()
-		--todo: tank detection
-		if true then return false end
-
-		local assignedRole = UnitGroupRolesAssigned ("player")
-		if (assignedRole == "NONE") then
-			local spec = GetSpecialization()
-			return spec and GetSpecializationRole (spec) == "TANK"
+	--true if the 'player' unit is flagged as tank or in respective class dependant status
+	--parameter "hasTankAura" is used to force aura scan skip for paladins -> UpdatePlayerTankState -> SPELL_AURA_APPLIED/REMOVED
+	local function IsPlayerEffectivelyTank(hasTankAura)
+		local playerIsTank = hasTankAura or false
+		
+		if not hasTankAura then
+			local playerClass = Plater.PlayerClass
+			if playerClass == "WARRIOR" then
+				playerIsTank = GetShapeshiftForm() == 2 or IsEquippedItemType("Shields") -- Defensive Stance or shield
+			elseif playerClass == "DRUID" then
+				playerIsTank = GetShapeshiftForm() == 1 -- Bear Form
+			elseif playerClass == "PALADIN" then
+				for i=1,40 do
+				  local spellId = select(10, UnitBuff("player",i))
+				  if spellId == 25780 then
+					playerIsTank = true
+				  end
+				end
+			end
 		end
-		return assignedRole == "TANK"
+		
+		-- if the player is assigned as MAINTANK, then treat him as one:
+		if not playerIsTank then
+			playerIsTank = GetPartyAssignment("MAINTANK", "player") or false
+		end
+		
+		return playerIsTank
 	end
 
 	--return true if the unit is in tank role
 	local function IsUnitEffectivelyTank (unit)
-		--todo: need some thing here
-		--return UnitGroupRolesAssigned (unit) == "TANK"
-
+		return GetPartyAssignment("MAINTANK", unit)
 	end
 	
 	-- toggle Threat Color Mode between tank / dps
@@ -964,6 +978,16 @@ Plater.DefaultSpellRangeList = {
 		end
 	end
 	
+	local function UpdatePlayerTankState(hasAura)
+		if (IsPlayerEffectivelyTank(hasAura)) then
+			TANK_CACHE [UnitName ("player")] = true
+			Plater.PlayerIsTank = true
+		else
+			TANK_CACHE [UnitName ("player")] = false
+			Plater.PlayerIsTank = false
+		end
+	end
+	
 	--iterate among group members and store the names of all tanks in the group
 	--this is called when the player enter, leave or when the group roster is changed
 	--tank cache is used mostly in the aggro check to know if the player is a tank
@@ -973,10 +997,7 @@ Plater.DefaultSpellRangeList = {
 		wipe (TANK_CACHE)
 		
 		--add the player to the tank pool if the player is a tank
-		if (IsPlayerEffectivelyTank()) then
-			TANK_CACHE [UnitName ("player")] = true
-			Plater.PlayerIsTank = true
-		end
+		UpdatePlayerTankState()
 		
 		--search for tanks in the raid
 		if (IsInRaid()) then
@@ -2799,6 +2820,18 @@ Plater.DefaultSpellRangeList = {
 			end
 			--end of patch
 			
+		end,
+		
+		UNIT_INVENTORY_CHANGED = function()
+			UpdatePlayerTankState()
+			Plater.UpdateAllNameplateColors()
+			Plater.UpdateAllPlates()
+		end,
+		
+		UPDATE_SHAPESHIFT_FORM = function()
+			UpdatePlayerTankState()
+			Plater.UpdateAllNameplateColors()
+			Plater.UpdateAllPlates()
 		end,
 	}
 
@@ -7816,6 +7849,28 @@ end
 			if (not DB_CAPTURED_SPELLS [spellID]) then
 				local auraType = amount
 				DB_CAPTURED_SPELLS [spellID] = {event = token, source = sourceName, type = auraType, npcID = Plater:GetNpcIdFromGuid (sourceGUID or ""), encounterID = Plater.CurrentEncounterID}
+			end
+			
+			-- paladin tank buff tracking
+			local playerGUID = Plater.PlayerGUID
+			if sourceGUID == playerGUID and targetGUID == playerGUID then
+				spellId = select(7, GetSpellInfo(spellName))
+				if spellId == 25780 then
+					UpdatePlayerTankState(true)
+					--Plater.RefreshTankCache()
+				end
+			end
+		end,
+		
+		SPELL_AURA_REMOVED = function (time, token, hidding, sourceGUID, sourceName, sourceFlag, sourceFlag2, targetGUID, targetName, targetFlag, targetFlag2, spellID, spellName, spellType, amount, overKill, school, resisted, blocked, absorbed, isCritical)
+			-- paladin tank buff tracking
+			local playerGUID = Plater.PlayerGUID
+			if sourceGUID == playerGUID and targetGUID == playerGUID then
+				spellId = select(7, GetSpellInfo(spellName))
+				if spellId == 25780 then
+					UpdatePlayerTankState(false)
+					--Plater.RefreshTankCache()
+				end
 			end
 		end,
 	}
