@@ -19,7 +19,7 @@ Usage example 1:
 --]================]
 if WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC then return end
 
-local MAJOR, MINOR = "LibClassicDurations", 37
+local MAJOR, MINOR = "LibClassicDurations", 41
 local lib = LibStub:NewLibrary(MAJOR, MINOR)
 if not lib then return end
 
@@ -450,12 +450,7 @@ function f:COMBAT_LOG_EVENT_UNFILTERED(event)
     return self:CombatLogHandler(CombatLogGetCurrentEventInfo())
 end
 
-function f:CombatLogHandler(...)
-    local timestamp, eventType, hideCaster,
-    srcGUID, srcName, srcFlags, srcFlags2,
-    dstGUID, dstName, dstFlags, dstFlags2,
-    spellID, spellName, spellSchool, auraType = ...
-
+local function ProcIndirectRefresh(eventType, spellName, srcGUID, srcFlags, dstGUID, dstFlags, dstName)
     if indirectRefreshSpells[spellName] then
         local refreshTable = indirectRefreshSpells[spellName]
         if refreshTable.events[eventType] then
@@ -486,6 +481,16 @@ function f:CombatLogHandler(...)
             end
         end
     end
+end
+
+function f:CombatLogHandler(...)
+    local timestamp, eventType, hideCaster,
+    srcGUID, srcName, srcFlags, srcFlags2,
+    dstGUID, dstName, dstFlags, dstFlags2,
+    spellID, spellName, spellSchool, auraType = ...
+
+
+    ProcIndirectRefresh(eventType, spellName, srcGUID, srcFlags, dstGUID, dstFlags, dstName)
 
     if  eventType == "SPELL_MISSED" and
         bit_band(srcFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) == COMBATLOG_OBJECT_AFFILIATION_MINE
@@ -519,9 +524,9 @@ function f:CombatLogHandler(...)
         local opts = spells[spellID]
 
         if not opts then
-            local npc_aura_duration = npc_spells[spellID]
-            if npc_aura_duration then
-                opts = { duration = npc_aura_duration }
+            local npcDurationForSpellName = npc_spells[spellID]
+            if npcDurationForSpellName then
+                opts = { duration = npcDurationForSpellName }
             -- elseif enableEnemyBuffTracking and not isDstFriendly and auraType == "BUFF" then
                 -- opts = { duration = 0 } -- it'll be accepted but as an indefinite aura
             end
@@ -743,15 +748,20 @@ end
 ---------------------------
 -- PUBLIC FUNCTIONS
 ---------------------------
-local function GetGUIDAuraTime(dstGUID, spellName, spellID, srcGUID, isStacking)
+local function GetGUIDAuraTime(dstGUID, spellName, spellID, srcGUID, isStacking, forcedNPCDuration)
     local guidTable = guids[dstGUID]
     if guidTable then
 
-        local lastRankID = spellNameToID[spellName]
+        local lastRankID = GetLastRankSpellID(spellName)
 
         local spellTable = guidTable[lastRankID]
         if spellTable then
             local applicationTable
+
+            -- Return when player spell and npc spell have the same name and the player spell is stacking
+            -- NPC spells are always assumed to not stack, so it won't find startTime
+            if forcedNPCDuration and spellTable.applications then return nil end
+
             if isStacking then
                 if srcGUID and spellTable.applications then
                     applicationTable = spellTable.applications[srcGUID]
@@ -763,9 +773,10 @@ local function GetGUIDAuraTime(dstGUID, spellName, spellID, srcGUID, isStacking)
             end
             if not applicationTable then return end
             local durationFunc, startTime, auraType, comboPoints = unpack(applicationTable)
-            local duration = cleanDuration(durationFunc, spellID, srcGUID, comboPoints)
+            local duration = forcedNPCDuration or cleanDuration(durationFunc, spellID, srcGUID, comboPoints)
             if duration == INFINITY then return nil end
             if not duration then return nil end
+            if not startTime then return nil end
             local mul = getDRMul(dstGUID, spellID)
             -- local mul = getDRMul(dstGUID, lastRankID)
             duration = duration * mul
@@ -795,11 +806,18 @@ end
 function lib.GetAuraDurationByUnitDirect(unit, spellID, casterUnit, spellName)
     assert(spellID, "spellID is nil")
     local opts = spells[spellID]
-    if not opts then return end
+    local isStacking
+    local npcDurationById
+    if opts then
+        isStacking = opts.stacking
+    else
+        npcDurationById = npc_spells[spellID]
+        if not npcDurationById then return end
+    end
     local dstGUID = UnitGUID(unit)
     local srcGUID = casterUnit and UnitGUID(casterUnit)
     if not spellName then spellName = GetSpellInfo(spellID) end
-    return GetGUIDAuraTime(dstGUID, spellName, spellID, srcGUID, opts.stacking)
+    return GetGUIDAuraTime(dstGUID, spellName, spellID, srcGUID, isStacking, npcDurationById)
 end
 GetAuraDurationByUnitDirect = lib.GetAuraDurationByUnitDirect
 
@@ -815,7 +833,7 @@ function lib:GetAuraDurationByGUID(dstGUID, spellID, srcGUID, spellName)
 end
 
 function lib:GetLastRankSpellIDByName(spellName)
-    return spellNameToID[spellName]
+    return GetLastRankSpellID(spellName)
 end
 
 -- Will not work for cp-based durations, KS and Rupture
