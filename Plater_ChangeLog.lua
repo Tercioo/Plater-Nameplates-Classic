@@ -8,6 +8,8 @@ function Plater.GetChangelogTable()
 	if (not Plater.ChangeLogTable) then
 		Plater.ChangeLogTable = {
 
+			{1576496347,  "Bug Fix", "Dec 16th, 2019", "Fixing tank recognition for player shapeshifts."},
+			
 			{1575627153,  "Bug Fix", "Nov 27th, 2019", "Tank recognition for player and raid tanks is now be more reliable and include raid role assignment 'MAINTANK'"},
 			{1575627153,  "Bug Fix", "Nov 25th, 2019", "Fixing 'Cast by Player' debuff recognition if the caster is a player totem."},
 			{1575627153,  "Options Changes", "Nov 19th, 2019", "Adding text options for the npc title."},
