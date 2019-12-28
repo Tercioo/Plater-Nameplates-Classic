@@ -8,6 +8,11 @@ function Plater.GetChangelogTable()
 	if (not Plater.ChangeLogTable) then
 		Plater.ChangeLogTable = {
 
+			{1577547573,  "Backend Changes", "Dec 28th, 2019", "Updating Masque integration."},
+			{1577547573,  "Bug Fix", "Dec 28th, 2019", "Ensure raid target frames to be above healthbar."},
+			{1577547573,  "Bug Fix", "Dec 23rd, 2019", "Fixing color and castBar updates on 'no healthbar' mode."},
+			{1577547573,  "Options Changes", "Dec 23rd, 2019", "Bringing back 'Hide Enemy Cast Bar' option."},
+
 			{1576496347,  "Bug Fix", "Dec 16th, 2019", "Fixing tank recognition for player shapeshifts."},
 			
 			{1575627153,  "Bug Fix", "Nov 27th, 2019", "Tank recognition for player and raid tanks is now be more reliable and include raid role assignment 'MAINTANK'"},
