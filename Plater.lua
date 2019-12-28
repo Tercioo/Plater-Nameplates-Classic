@@ -88,8 +88,8 @@ if LCD then
 	UnitAura = LCD.UnitAuraWithBuffs
 end
 
---threat stuff from: https://github.com/EsreverWoW/ClassicThreatMeter by EsreverWoW
-local ThreatLib = LibStub:GetLibrary ("ThreatClassic-1.0")
+--threat stuff from: https://github.com/dfherr/LibThreatClassic2
+local ThreatLib = LibStub:GetLibrary ("LibThreatClassic2")
 
 local UnitThreatSituation = function (unit, mob)
     return ThreatLib:UnitThreatSituation (unit, mob)
