@@ -3913,6 +3913,11 @@ end
 		for _, plateFrame in ipairs (Plater.GetAllShownPlates()) do
 			Plater.NameplateTick (plateFrame.OnTickFrame, 1)
 		end
+		if Plater.Masque then
+			Plater.Masque.AuraFrame1:ReSkin()
+			Plater.Masque.AuraFrame2:ReSkin()
+			Plater.Masque.BuffSpecial:ReSkin()
+		end
 	end
 	
 	--stack auras with the same name and change the stack text above the icon to indicate how many auras with the same name the unit has
@@ -4127,7 +4132,7 @@ end
 	end
 
 	function Plater.CreateAuraIcon (parent, name) --private
-		local newIcon = CreateFrame ("frame", name, parent)
+		local newIcon = CreateFrame ("Button", name, parent)
 		newIcon:Hide()
 		newIcon:SetSize (20, 16)
 		
@@ -4140,7 +4145,7 @@ end
 		newIcon.Border:SetAllPoints()
 		newIcon.Border:SetColorTexture (0, 0, 0)
 		
-		newIcon.Icon = newIcon:CreateTexture (nil, "artwork")
+		newIcon.Icon = newIcon:CreateTexture (nil, "BORDER")
 		newIcon.Icon:SetSize (18, 12)
 		newIcon.Icon:SetPoint ("center")
 		newIcon.Icon:SetTexCoord (.05, .95, .1, .6)
@@ -4224,45 +4229,47 @@ end
 			if (Plater.Masque) then
 				if (self.Name == "Main") then
 					local t = {
-						FloatingBG = false,
+						FloatingBG = nil, --false,
 						Icon = newFrameIcon.Icon,
 						Cooldown = newFrameIcon.Cooldown,
-						Flash = false,
-						Pushed = false,
-						Normal = false,
-						Disabled = false,
-						Checked = false,
-						Border = newFrameIcon.Border,
-						AutoCastable = false,
-						Highlight = false,
-						HotKey = false,
+						Flash = nil, --false,
+						Pushed = nil, --false,
+						Normal = nil, --false,
+						Disabled = nil, --false,
+						Checked = nil, --false,
+						Border = nil, --newFrameIcon.Border,
+						AutoCastable = nil, --false,
+						Highlight = nil, --false,
+						HotKey = nil, --false,
 						Count = false,
-						Name = false,
+						Name = nil, --false,
 						Duration = false,
-						Shine = false,
+						Shine = nil, --false,
 					}
+					newFrameIcon.Border:Hide() --let Masque handle the border...
 					Plater.Masque.AuraFrame1:AddButton (newFrameIcon, t)
 					Plater.Masque.AuraFrame1:ReSkin()
 					
 				elseif (self.Name == "Secondary") then
 					local t = {
-						FloatingBG = false,
+						FloatingBG = nil, --false,
 						Icon = newFrameIcon.Icon,
 						Cooldown = newFrameIcon.Cooldown,
-						Flash = false,
-						Pushed = false,
-						Normal = false,
-						Disabled = false,
-						Checked = false,
-						Border = newFrameIcon.Border,
-						AutoCastable = false,
-						Highlight = false,
-						HotKey = false,
+						Flash = nil, --false,
+						Pushed = nil, --false,
+						Normal = nil, --false,
+						Disabled = nil, --false,
+						Checked = nil, --false,
+						Border = nil, --newFrameIcon.Border,
+						AutoCastable = nil, --false,
+						Highlight = nil, --false,
+						HotKey = nil, --false,
 						Count = false,
-						Name = false,
+						Name = nil, --false,
 						Duration = false,
-						Shine = false,
+						Shine = nil, --false,
 					}
+					newFrameIcon.Border:Hide() --let Masque handle the border...
 					Plater.Masque.AuraFrame2:AddButton (newFrameIcon, t)
 					Plater.Masque.AuraFrame2:ReSkin()
 					
@@ -4586,23 +4593,24 @@ end
 		--check if Masque is enabled on Plater and reskin the aura icon
 		if (Plater.Masque and not iconFrame.Masqued) then
 			local t = {
-				FloatingBG = false,
+				FloatingBG = nil, --false,
 				Icon = iconFrame.Texture,
 				Cooldown = iconFrame.Cooldown,
-				Flash = false,
-				Pushed = false,
+				Flash = nil, --false,
+				Pushed = nil, --false,
 				Normal = false,
-				Disabled = false,
-				Checked = false,
-				Border = iconFrame.Border,
-				AutoCastable = false,
-				Highlight = false,
-				HotKey = false,
+				Disabled = nil, --false,
+				Checked = nil, --false,
+				Border = nil, --iconFrame.Border,
+				AutoCastable = nil, --false,
+				Highlight = nil, --false,
+				HotKey = nil, --false,
 				Count = false,
-				Name = false,
+				Name = nil, --false,
 				Duration = false,
-				Shine = false,
+				Shine = nil, --false,
 			}
+			iconFrame.Border:Hide() --let Masque handle the border...
 			Plater.Masque.BuffSpecial:AddButton (iconFrame, t)
 			Plater.Masque.BuffSpecial:ReSkin()
 			iconFrame.Masqued = true

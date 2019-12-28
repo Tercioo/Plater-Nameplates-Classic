@@ -1163,6 +1163,7 @@ local debuff_options = {
 		get = function() return Plater.db.profile.aura_width end,
 		set = function (self, fixedparam, value) 
 			Plater.db.profile.aura_width = value
+			Plater.RefreshDBUpvalues()
 			Plater.RefreshAuras()
 			Plater.UpdateAllPlates()
 		end,
@@ -1664,6 +1665,7 @@ local debuff_options = {
 			Plater.db.profile.aura_border_colors_by_type = value
 			Plater.RefreshDBUpvalues()
 			Plater.UpdateAllPlates()
+			Plater.RefreshAuras()
 		end,
 		name = "Use type based aura border colors",
 		desc = "Use the Blizzard debuff type colors for borders",
