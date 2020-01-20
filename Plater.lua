@@ -753,8 +753,9 @@ Plater.DefaultSpellRangeList = {
 	local AUTO_TRACKING_EXTRA_DEBUFFS = {}
 	
 	--if automatic aura tracking and there's auras to manually track (user added into the buff tracking tab)
-	local CAN_TRACK_EXTRA_BUFFS = false
-	local CAN_TRACK_EXTRA_DEBUFFS = false
+	-- this is not used atm...
+	--local CAN_TRACK_EXTRA_BUFFS = false
+	--local CAN_TRACK_EXTRA_DEBUFFS = false
 	
 
 	--list of auras the user added into the track list for special auras, _MINE caches the auras where the user checked the 'Only Mine' checkbox
@@ -849,6 +850,25 @@ Plater.DefaultSpellRangeList = {
 			plateFrame.unitFrame [MEMBER_RANGE] = true
 			return
 		end
+		
+		--this unit is target
+		local unitIsTarget
+		--alpha value to set into this nameplate
+		local alphaMultiplier = 1
+
+		--if no target alpha is enabled and the player is targetting something else than the player it self
+		if (DB_USE_NON_TARGETS_ALPHA and Plater.PlayerHasTargetNonSelf) then
+			if (plateFrame [MEMBER_TARGET]) then
+				unitIsTarget = true
+			else
+				--range_check_alpha is used as alpha for nameplates out of range
+				--but the non targets alpha also use it to its alpha value
+				alphaMultiplier = Plater.db.profile.range_check_alpha
+			end
+		end
+		
+		--if the unit is target return 1 or AlphaBlending * the alpha multiplier from above
+		local alphaTarget = ceil(Plater.GetPlateAlpha (plateFrame) * alphaMultiplier * 20) / 20
 		
 		if (not (Plater.SpellForRangeCheck == nil or Plater.SpellForRangeCheck == '')) then
 			--check when the unit just has been added to the screen
@@ -1510,14 +1530,14 @@ Plater.DefaultSpellRangeList = {
 			wipe (AUTO_TRACKING_EXTRA_BUFFS)
 			wipe (AUTO_TRACKING_EXTRA_DEBUFFS)
 			
-			CAN_TRACK_EXTRA_BUFFS = false
-			CAN_TRACK_EXTRA_DEBUFFS = false
+			--CAN_TRACK_EXTRA_BUFFS = false -- this is not used atm...
+			--CAN_TRACK_EXTRA_DEBUFFS = false -- this is not used atm...
 
 			for spellId, _ in pairs (extraBuffsToTrack) do
 				local spellName = GetSpellInfo (spellId)
 				if (spellName) then
 					AUTO_TRACKING_EXTRA_BUFFS [spellName] = true
-					CAN_TRACK_EXTRA_BUFFS = true
+					--CAN_TRACK_EXTRA_BUFFS = true -- this is not used atm...
 				end
 			end
 			
@@ -1525,7 +1545,7 @@ Plater.DefaultSpellRangeList = {
 				local spellName = GetSpellInfo (spellId)
 				if (spellName) then
 					AUTO_TRACKING_EXTRA_DEBUFFS [spellName] = true
-					CAN_TRACK_EXTRA_DEBUFFS = true
+					--CAN_TRACK_EXTRA_DEBUFFS = true -- this is not used atm...
 				end
 			end
 

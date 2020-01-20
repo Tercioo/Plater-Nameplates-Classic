@@ -1077,7 +1077,7 @@ local alpha_major_options = {
 		end
 	end
 
-	tinsert (options_table1, {
+	tinsert (alpha_major_options, {
 		type = "select",
 		get = function() return PlaterDBChr.spellRangeCheck end,
 		values = function() 
@@ -5594,8 +5594,6 @@ local relevance_options = {
 			desc = L["OPTIONS_GENERALSETTINGS_HEALTHBAR_BGCOLOR"],
 		},
 	
-		{type = "blank"},
-		{type = "label", get = function() return "Border:" end, text_template = DF:GetTemplate ("font", "ORANGE_FONT_TEMPLATE")},
 		{
 			type = "color",
 			get = function()
@@ -5625,6 +5623,151 @@ local relevance_options = {
 			usedecimals = true,
 			name = "Border Thickness",
 			desc = "How thick the border should be.\n\n|cFFFFFF00Important|r: right click the slider to manually type the value.",
+		},
+		
+		{type = "blank"},
+		{type = "label", get = function() return "Indicators:" end, text_template = DF:GetTemplate ("font", "ORANGE_FONT_TEMPLATE")},
+		
+		{
+			type = "toggle",
+			get = function() return Plater.db.profile.indicator_faction end,
+			set = function (self, fixedparam, value) 
+				Plater.db.profile.indicator_faction = value
+				Plater.UpdateAllPlates()
+			end,
+			name = "Enemy Faction Icon",
+			desc = "Show horde or alliance icon.",
+		},
+		
+		{
+			type = "toggle",
+			get = function() return Plater.db.profile.indicator_pet end,
+			set = function (self, fixedparam, value) 
+				Plater.db.profile.indicator_pet = value
+				Plater.UpdateAllPlates()
+			end,
+			name = "Pet Icon",
+			desc = "Pet Icon",
+		},
+		
+		{
+			type = "toggle",
+			get = function() return Plater.db.profile.health_cutoff end,
+			set = function (self, fixedparam, value) 
+				Plater.db.profile.health_cutoff = value
+				Plater.UpdateAllPlates()
+			end,
+			name = "Execute Range",
+			desc = "Show an indicator when the unit is in execute range.\n\nPlater auto detects execute range for:\n\n|cFFFFFF00Hunter|r: Beast Master spec with Killer Instinct talent.\n\n|cFFFFFF00Warrior|r: Arms and Fury specs.\n\n|cFFFFFF00Priest|r: Shadow spec with Shadow Word: Death talent.\n\n|cFFFFFF00Mage|r: Fire spec with Searing Touch talent.",
+		},
+
+		
+		{
+			type = "toggle",
+			get = function() return Plater.db.profile.indicator_elite end,
+			set = function (self, fixedparam, value) 
+				Plater.db.profile.indicator_elite = value
+				Plater.UpdateAllPlates()
+			end,
+			name = "Elite Icon",
+			desc = "Show when the actor is elite.",
+		},
+		{
+			type = "toggle",
+			get = function() return Plater.db.profile.indicator_rare end,
+			set = function (self, fixedparam, value) 
+				Plater.db.profile.indicator_rare = value
+				Plater.UpdateAllPlates()
+			end,
+			name = "Rare Icon",
+			desc = "Show when the actor is rare.",
+		},
+		{
+			type = "toggle",
+			get = function() return Plater.db.profile.indicator_quest end,
+			set = function (self, fixedparam, value) 
+				Plater.db.profile.indicator_quest = value
+				Plater.UpdateAllPlates()
+			end,
+			name = "Quest Icon",
+			desc = "Show when the actor is a boss for a quest.",
+		},
+		{
+			type = "toggle",
+			get = function() return Plater.db.profile.indicator_enemyclass end,
+			set = function (self, fixedparam, value) 
+				Plater.db.profile.indicator_enemyclass = value
+				Plater.UpdateAllPlates()
+			end,
+			name = "Enemy Class",
+			desc = "Enemy player class icon.",
+		},
+		
+		{
+			type = "toggle",
+			get = function() return Plater.db.profile.indicator_spec end,
+			set = function (self, fixedparam, value) 
+				Plater.db.profile.indicator_spec = value
+				Plater.UpdateAllPlates()
+			end,
+			name = "Enemy Spec",
+			desc = "Enemy player spec icon.\n\n|cFFFFFF00Important|r: must have Details! Damage Meter installed.",
+		},
+		{
+			type = "range",
+			get = function() return Plater.db.profile.indicator_scale end,
+			set = function (self, fixedparam, value) 
+				Plater.db.profile.indicator_scale = value
+				Plater.UpdateAllPlates()
+			end,
+			min = 0.2,
+			max = 3,
+			step = 0.01,
+			usedecimals = true,
+			name = "Scale",
+			desc = "Scale",
+		},
+		
+		
+		--
+
+		--indicator icon anchor
+		{
+			type = "select",
+			get = function() return Plater.db.profile.indicator_anchor.side end,
+			values = function() return build_anchor_side_table (nil, "indicator_anchor") end,
+			name = L["OPTIONS_ANCHOR"],
+			desc = "Which side of the nameplate this widget is attach to.",
+		},
+		--indicator icon anchor x offset
+		{
+			type = "range",
+			get = function() return Plater.db.profile.indicator_anchor.x end,
+			set = function (self, fixedparam, value) 
+				Plater.db.profile.indicator_anchor.x = value
+				Plater.UpdateAllPlates()
+			end,
+			min = -100,
+			max = 100,
+			step = 1,
+			usedecimals = true,
+			name = L["OPTIONS_XOFFSET"],
+			desc = "Slightly move horizontally.",
+		},
+		--indicator icon anchor y offset
+		{
+			type = "range",
+			get = function() return Plater.db.profile.indicator_anchor.y end,
+			set = function (self, fixedparam, value) 
+				Plater.db.profile.indicator_anchor.y = value
+				Plater.UpdateAllPlates()
+			end,
+			min = -100,
+			max = 100,
+			step = 1,
+			usedecimals = true,
+			name = L["OPTIONS_YOFFSET"],
+			desc = "Slightly move vertically.",
 		},
 	
 		--cast bar options
@@ -6011,152 +6154,9 @@ local relevance_options = {
 			name = L["OPTIONS_YOFFSET"],
 			desc = "Y Offset",
 		},
-
+		
 		{type = "breakline"},
-		{type = "label", get = function() return "Indicators:" end, text_template = DF:GetTemplate ("font", "ORANGE_FONT_TEMPLATE")},
-		
-		{
-			type = "toggle",
-			get = function() return Plater.db.profile.indicator_faction end,
-			set = function (self, fixedparam, value) 
-				Plater.db.profile.indicator_faction = value
-				Plater.UpdateAllPlates()
-			end,
-			name = "Enemy Faction Icon",
-			desc = "Show horde or alliance icon.",
-		},
-		
-		{
-			type = "toggle",
-			get = function() return Plater.db.profile.indicator_pet end,
-			set = function (self, fixedparam, value) 
-				Plater.db.profile.indicator_pet = value
-				Plater.UpdateAllPlates()
-			end,
-			name = "Pet Icon",
-			desc = "Pet Icon",
-		},
-		
-		{
-			type = "toggle",
-			get = function() return Plater.db.profile.health_cutoff end,
-			set = function (self, fixedparam, value) 
-				Plater.db.profile.health_cutoff = value
-				Plater.UpdateAllPlates()
-			end,
-			name = "Execute Range",
-			desc = "Show an indicator when the unit is in execute range.\n\nPlater auto detects execute range for:\n\n|cFFFFFF00Hunter|r: Beast Master spec with Killer Instinct talent.\n\n|cFFFFFF00Warrior|r: Arms and Fury specs.\n\n|cFFFFFF00Priest|r: Shadow spec with Shadow Word: Death talent.\n\n|cFFFFFF00Mage|r: Fire spec with Searing Touch talent.",
-		},
-
-		
-		{
-			type = "toggle",
-			get = function() return Plater.db.profile.indicator_elite end,
-			set = function (self, fixedparam, value) 
-				Plater.db.profile.indicator_elite = value
-				Plater.UpdateAllPlates()
-			end,
-			name = "Elite Icon",
-			desc = "Show when the actor is elite.",
-		},
-		{
-			type = "toggle",
-			get = function() return Plater.db.profile.indicator_rare end,
-			set = function (self, fixedparam, value) 
-				Plater.db.profile.indicator_rare = value
-				Plater.UpdateAllPlates()
-			end,
-			name = "Rare Icon",
-			desc = "Show when the actor is rare.",
-		},
-		{
-			type = "toggle",
-			get = function() return Plater.db.profile.indicator_quest end,
-			set = function (self, fixedparam, value) 
-				Plater.db.profile.indicator_quest = value
-				Plater.UpdateAllPlates()
-			end,
-			name = "Quest Icon",
-			desc = "Show when the actor is a boss for a quest.",
-		},
-		{
-			type = "toggle",
-			get = function() return Plater.db.profile.indicator_enemyclass end,
-			set = function (self, fixedparam, value) 
-				Plater.db.profile.indicator_enemyclass = value
-				Plater.UpdateAllPlates()
-			end,
-			name = "Enemy Class",
-			desc = "Enemy player class icon.",
-		},
-		
-		{
-			type = "toggle",
-			get = function() return Plater.db.profile.indicator_spec end,
-			set = function (self, fixedparam, value) 
-				Plater.db.profile.indicator_spec = value
-				Plater.UpdateAllPlates()
-			end,
-			name = "Enemy Spec",
-			desc = "Enemy player spec icon.\n\n|cFFFFFF00Important|r: must have Details! Damage Meter installed.",
-		},
-		{
-			type = "range",
-			get = function() return Plater.db.profile.indicator_scale end,
-			set = function (self, fixedparam, value) 
-				Plater.db.profile.indicator_scale = value
-				Plater.UpdateAllPlates()
-			end,
-			min = 0.2,
-			max = 3,
-			step = 0.01,
-			usedecimals = true,
-			name = "Scale",
-			desc = "Scale",
-		},
-		
-		
-		--
-
-		--indicator icon anchor
-		{
-			type = "select",
-			get = function() return Plater.db.profile.indicator_anchor.side end,
-			values = function() return build_anchor_side_table (nil, "indicator_anchor") end,
-			name = L["OPTIONS_ANCHOR"],
-			desc = "Which side of the nameplate this widget is attach to.",
-		},
-		--indicator icon anchor x offset
-		{
-			type = "range",
-			get = function() return Plater.db.profile.indicator_anchor.x end,
-			set = function (self, fixedparam, value) 
-				Plater.db.profile.indicator_anchor.x = value
-				Plater.UpdateAllPlates()
-			end,
-			min = -100,
-			max = 100,
-			step = 1,
-			usedecimals = true,
-			name = L["OPTIONS_XOFFSET"],
-			desc = "Slightly move horizontally.",
-		},
-		--indicator icon anchor y offset
-		{
-			type = "range",
-			get = function() return Plater.db.profile.indicator_anchor.y end,
-			set = function (self, fixedparam, value) 
-				Plater.db.profile.indicator_anchor.y = value
-				Plater.UpdateAllPlates()
-			end,
-			min = -100,
-			max = 100,
-			step = 1,
-			usedecimals = true,
-			name = L["OPTIONS_YOFFSET"],
-			desc = "Slightly move vertically.",
-		},
-		
+		{type = "blank"},{type = "blank"},{type = "blank"},{type = "blank"},{type = "blank"},{type = "blank"},{type = "blank"},{type = "blank"},
 		{type = "blank"},
 		
 		{type = "label", get = function() return "Raid Mark:" end, text_template = DF:GetTemplate ("font", "ORANGE_FONT_TEMPLATE")},
@@ -6229,10 +6229,6 @@ local relevance_options = {
 		
 		{type = "breakline"},
 	}
-
-	for _, t in ipairs (options_table1_continue) do
-		tinsert (options_table1, t)
-	end
 	
 	DF:BuildMenu (generalOptionsAnchor, options_table1, 0, 0, mainHeightSize, true, options_text_template, options_dropdown_template, options_switch_template, true, options_slider_template, options_button_template, globalCallback)
 	
