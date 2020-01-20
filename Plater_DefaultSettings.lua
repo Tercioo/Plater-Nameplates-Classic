@@ -493,6 +493,11 @@ PLATER_DEFAULT_SETTINGS = {
 			},
 		},
 		
+		login_counter = 0,
+
+		transparency_behavior = 0x1,
+		non_targeted_alpha_enabled = false,
+		
 		quick_hide = false, --hide the nameplate when the unit hits 0 health points | making disabled by default, this maybe is bugging hunters FD
 		
 		enable_masque_support = false,
@@ -500,7 +505,7 @@ PLATER_DEFAULT_SETTINGS = {
 		last_news_time = 0,
 		disable_omnicc_on_auras = false,
 		
-		show_health_prediction = false,
+		show_health_prediction = true,
 		show_shield_prediction = true,
 		
 		resource_on_target = true,
