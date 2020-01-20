@@ -4588,7 +4588,7 @@ end
 		end
 		
 		--spellId, borderColor, startTime, duration, forceTexture, descText
-		local iconFrame = self.ExtraIconFrame:SetIcon (spellId, borderColor, expirationTime - duration, duration, false, casterName and {text = casterName, text_color = casterClass} or false)
+		local iconFrame = self.ExtraIconFrame:SetIcon (spellId, borderColor, expirationTime - duration, duration, false, casterName and {text = casterName, text_color = casterClass} or false, count, debuffType, caster, canStealOrPurge)
 		--add the spell into the cache
 		self.ExtraIconFrame.AuraCache [spellId] = true
 		self.ExtraIconFrame.AuraCache [spellName] = true
