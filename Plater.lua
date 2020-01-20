@@ -5432,6 +5432,7 @@ end
 				end
 				
 				tickFrame.BuffFrame:SetAlpha (DB_AURA_ALPHA)
+				tickFrame.BuffFrame2:SetAlpha (DB_AURA_ALPHA)
 			end
 			
 			--set the delay to perform another update
@@ -6650,12 +6651,14 @@ end
 				if (DB_PLATE_CONFIG [actorType].only_names) then
 					healthBar:Hide()
 					buffFrame:Hide()
+					buffFrame2:Hide()
 					nameFrame:Hide()
 					plateFrame.IsNpcWithoutHealthBar = true
 				
 				else
 					healthBar:Show()
 					buffFrame:Show()
+					buffFrame2:Show()
 					nameFrame:Show()
 				end
 			
@@ -6664,6 +6667,7 @@ end
 
 				healthBar:Show()
 				buffFrame:Show()
+				buffFrame2:Show()
 				nameFrame:Show()
 				
 				--these twoseettings make the healthing dummy show the healthbar
@@ -6677,6 +6681,7 @@ end
 
 				healthBar:Hide()
 				buffFrame:Hide()
+				buffFrame2:Hide()
 				nameFrame:Hide()
 				plateFrame.IsNpcWithoutHealthBar = true
 				
@@ -6684,12 +6689,14 @@ end
 				-- show only if a title is present
 				healthBar:Hide()
 				buffFrame:Hide()
+				buffFrame2:Hide()
 				nameFrame:Hide()
 				plateFrame.IsNpcWithoutHealthBar = true
 			
 			else
 				healthBar:Show()
 				buffFrame:Show()
+				buffFrame2:Show()
 				nameFrame:Show()
 			end
 
@@ -6715,12 +6722,14 @@ end
 			if (plateFrame.PlayerCannotAttack) then
 				healthBar:Hide()
 				buffFrame:Hide()
+				buffFrame2:Hide()
 				nameFrame:Hide()
 				plateFrame.IsNpcWithoutHealthBar = true
 				
 			else
 				healthBar:Show()
 				buffFrame:Show()
+				buffFrame2:Show()
 				nameFrame:Show()
 				
 				--> check for enemy player class color
@@ -8265,6 +8274,7 @@ end
 					local buffFrame2 = plateFrame.unitFrame.BuffFrame2
 					
 					buffFrame:SetAlpha (DB_AURA_ALPHA)
+					buffFrame2:SetAlpha (DB_AURA_ALPHA)
 					
 					--> reset next aura icon to use
 					buffFrame.NextAuraIcon = 1
@@ -8596,6 +8606,7 @@ end
 		buffFrame.unit = self.unit
 		Plater.AlignAuraFrames (buffFrame)
 		buffFrame:SetAlpha (DB_AURA_ALPHA)
+		buffFrame2:SetAlpha (DB_AURA_ALPHA)
 	end
 	
 	--return the health bar and the unitname text
