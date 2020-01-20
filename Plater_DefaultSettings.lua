@@ -23,6 +23,8 @@ LibSharedMedia:Register ("statusbar", "PlaterHighlight", [[Interface\AddOns\Plat
 LibSharedMedia:Register ("statusbar", "PlaterFocus", [[Interface\AddOns\Plater\images\overlay_indicator_1]])
 LibSharedMedia:Register ("statusbar", "PlaterHealth", [[Interface\AddOns\Plater\images\nameplate_health_texture]])
 LibSharedMedia:Register ("statusbar", "testbar", [[Interface\AddOns\Plater\images\testbar.tga]])
+LibSharedMedia:Register ("statusbar", "You Are Beautiful!", [[Interface\AddOns\Plater\images\regular_white]])
+LibSharedMedia:Register ("statusbar", "PlaterBackground 2", [[Interface\AddOns\Plater\images\noise_background]])
 
 LibSharedMedia:Register ("font", "Oswald", [[Interface\Addons\Plater\fonts\Oswald-Regular.otf]])
 LibSharedMedia:Register ("font", "Nueva Std Cond", [[Interface\Addons\Plater\fonts\NuevaStd-Cond.otf]])
@@ -98,7 +100,7 @@ PLATER_DEFAULT_SETTINGS = {
 				health = {70, 2},
 				health_incombat = {70, 2},
 				cast = {80, 8},
-				cast_incombat = {80, 12},
+				cast_incombat = {80, 14},
 				mana = {100, 3},
 				mana_incombat = {100, 3},
 				buff_frame_y_offset = 10,
@@ -499,7 +501,7 @@ PLATER_DEFAULT_SETTINGS = {
 		disable_omnicc_on_auras = false,
 		
 		show_health_prediction = false,
-		show_shield_prediction = false,
+		show_shield_prediction = true,
 		
 		resource_on_target = true,
 		
@@ -725,7 +727,7 @@ PLATER_DEFAULT_SETTINGS = {
 		not_affecting_combat_enabled = false,
 		not_affecting_combat_alpha = 0.799999,
 		range_check_enabled = false,
-		range_check_alpha = 1,
+		range_check_alpha = 0.65,
 		
 		target_highlight = true,
 		target_highlight_alpha = 0.75,
@@ -2342,18 +2344,17 @@ PLATER_DEFAULT_SETTINGS = {
 
 		},
 		
-		health_statusbar_texture = "PlaterHealth",
-		--health_statusbar_texture = "Details Flat",
+		health_statusbar_texture = "You Are Beautiful!",
 		
 		health_selection_overlay = "Details Flat",
 		health_selection_overlay_alpha = 0.1,
 		
-		health_statusbar_bgtexture = "PlaterBackground",
-		health_statusbar_bgcolor = {0.0431372, 0.0431372, 0.0431372, 1},
+		health_statusbar_bgtexture = "PlaterBackground 2",
+		health_statusbar_bgcolor = {0.113725, 0.113725, 0.113725, 0.89000000},
 		
 		cast_statusbar_texture = "Details Flat",
-		cast_statusbar_bgtexture = "Details Serenity",
-		cast_statusbar_bgcolor = {0, 0, 0, 0.797810},
+		cast_statusbar_bgtexture = "PlaterBackground 2",
+		cast_statusbar_bgcolor = {0.113725, 0.113725, 0.113725, 0.891240},
 		cast_statusbar_color = {1, .7, 0, 0.96},
 		cast_statusbar_color_nointerrupt = {.5, .5, .5, 0.96},
 		cast_statusbar_color_interrupted = {1, .1, .1, 1},
@@ -2386,7 +2387,7 @@ PLATER_DEFAULT_SETTINGS = {
 		
 		color_override = true,
 		color_override_colors = {
-			[UNITREACTION_HOSTILE] = {0.917647, 0.2784313, 0.2078431, 1},
+			[UNITREACTION_HOSTILE] = {0.9176470, 0.1294117, 0.0705882, 1},
 			[UNITREACTION_NEUTRAL] = {0.9254901, 0.8, 0.2666666, 1},
 			[UNITREACTION_FRIENDLY] = {0.023529, 0.823529, 0.023518, 1},
 		},
