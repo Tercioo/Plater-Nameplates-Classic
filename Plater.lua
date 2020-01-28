@@ -874,7 +874,7 @@ Plater.DefaultSpellRangeList = {
 			--check when the unit just has been added to the screen
 			if (onAdded or true) then
 				--range check when the nameplate is added
-				if (IsSpellInRange (Plater.SpellForRangeCheck, plateFrame [MEMBER_UNITID]) == 1) then
+				if (IsSpellInRange (Plater.SpellForRangeCheck, plateFrame.unitFrame [MEMBER_UNITID]) == 1) then
 					--unit is in rage
 					plateFrame.FadedIn = true
 					plateFrame.unitFrame:SetAlpha (alphaTarget)
@@ -895,7 +895,7 @@ Plater.DefaultSpellRangeList = {
 				end
 
 			else
-				if (IsSpellInRange (Plater.SpellForRangeCheck, plateFrame [MEMBER_UNITID]) == 1) then
+				if (IsSpellInRange (Plater.SpellForRangeCheck, plateFrame.unitFrame [MEMBER_UNITID]) == 1) then
 					--unit is in rage
 					print (plateFrame [MEMBER_ALPHA] , alphaTarget)
 					if (plateFrame [MEMBER_ALPHA] ~= alphaTarget) then
@@ -1121,7 +1121,7 @@ Plater.DefaultSpellRangeList = {
 				local customBorderColor = unitFrame.customBorderColor
 			
 			--full refresh the nameplate, this will override user data from scripts
-			Plater.RunFunctionForEvent ("NAME_PLATE_UNIT_ADDED", plateFrame [MEMBER_UNITID])
+			Plater.RunFunctionForEvent ("NAME_PLATE_UNIT_ADDED", unitFrame [MEMBER_UNITID])
 			
 			--restore user input data
 				unitFrame.customHealthBarWidth = customHealthBarWidth
@@ -5497,7 +5497,7 @@ end
 				local scriptInfo = unitFrame:ScriptGetInfo (globalScriptObject, scriptContainer)
 				
 				local scriptEnv = scriptInfo.Env
-				scriptEnv._UnitID = tickFrame.PlateFrame [MEMBER_UNITID]
+				scriptEnv._UnitID = tickFrame [MEMBER_UNITID]
 				scriptEnv._NpcID = tickFrame.PlateFrame [MEMBER_NPCID]
 				scriptEnv._UnitName = tickFrame.PlateFrame [MEMBER_NAME]
 				scriptEnv._UnitGUID = tickFrame.PlateFrame [MEMBER_GUID]
@@ -5866,7 +5866,7 @@ end
 	-- ~target
 	function Plater.UpdateTarget (plateFrame) --private
 
-		if (UnitIsUnit (plateFrame [MEMBER_UNITID], "focus") and Plater.db.profile.focus_indicator_enabled) then
+		if (UnitIsUnit (plateFrame.unitFrame [MEMBER_UNITID], "focus") and Plater.db.profile.focus_indicator_enabled) then
 			--this is a rare call, no need to cache these values
 			local texture = LibSharedMedia:Fetch ("statusbar", Plater.db.profile.focus_texture)
 			plateFrame.FocusIndicator:SetTexture (texture)
@@ -5876,7 +5876,7 @@ end
 			plateFrame.FocusIndicator:Hide()
 		end
 
-		if (UnitIsUnit (plateFrame [MEMBER_UNITID], "target")) then
+		if (UnitIsUnit (plateFrame.unitFrame [MEMBER_UNITID], "target")) then
 			plateFrame [MEMBER_TARGET] = true
 			plateFrame.unitFrame [MEMBER_TARGET] = true
 		
@@ -6175,7 +6175,7 @@ end
 			else
 				--isn't friend, check if is showing only the name and if is showing class colors
 				if (Plater.db.profile.plate_config [ACTORTYPE_FRIENDLY_PLAYER].actorname_use_class_color) then
-					local _, unitClass = UnitClass (plateFrame [MEMBER_UNITID])
+					local _, unitClass = UnitClass (plateFrame.unitFrame [MEMBER_UNITID])
 					if (unitClass) then
 						local color = RAID_CLASS_COLORS [unitClass]
 						DF:SetFontColor (nameFontString, color.r, color.g, color.b)
@@ -6367,7 +6367,7 @@ end
 			--class colors should be used, if possible, because this is enabled
 			plateFrame.isFriend = nil
 			
-			local _, unitClass = UnitClass (plateFrame [MEMBER_UNITID])
+			local _, unitClass = UnitClass (plateFrame.unitFrame [MEMBER_UNITID])
 			if (unitClass) then
 				local color = RAID_CLASS_COLORS [unitClass]
 				DF:SetFontColor (nameString, color.r, color.g, color.b)
@@ -6758,7 +6758,7 @@ end
 			if (not Plater.db.profile.use_playerclass_color) then
 				Plater.ChangeHealthBarColor_Internal (healthBar, unpack(DB_PLATE_CONFIG [actorType].fixed_class_color))
 			else
-				local _, class = UnitClass (plateFrame [MEMBER_UNITID])
+				local _, class = UnitClass (unitFrame [MEMBER_UNITID])
 				if (class) then		
 					local color = RAID_CLASS_COLORS [class]
 					Plater.ChangeHealthBarColor_Internal (healthBar, color.r, color.g, color.b)
@@ -6786,7 +6786,7 @@ end
 				--> check for enemy player class color
 				if (actorType == ACTORTYPE_ENEMY_PLAYER) then
 					if (DB_PLATE_CONFIG [actorType].use_playerclass_color) then
-						local _, class = UnitClass (plateFrame [MEMBER_UNITID])
+						local _, class = UnitClass (unitFrame [MEMBER_UNITID])
 						if (class) then		
 							local color = RAID_CLASS_COLORS [class]
 							Plater.ChangeHealthBarColor_Internal (healthBar, color.r, color.g, color.b)
@@ -6955,7 +6955,7 @@ end
 			healthBar.DetailsDamageTaken:SetText ("")
 		end
 		
-		if (plateFrame.OnTickFrame.actorType == actorType and plateFrame.OnTickFrame.unit == plateFrame [MEMBER_UNITID]) then
+		if (plateFrame.OnTickFrame.actorType == actorType and plateFrame.OnTickFrame.unit == unitFrame [MEMBER_UNITID]) then
 			Plater.NameplateTick (plateFrame.OnTickFrame, 10)
 		end
 	end
@@ -7086,7 +7086,7 @@ end
 		
 		if (actorType == ACTORTYPE_ENEMY_PLAYER) then
 			if (config.indicator_faction) then
-				Plater.AddIndicator (plateFrame, UnitFactionGroup (plateFrame [MEMBER_UNITID]))
+				Plater.AddIndicator (plateFrame, UnitFactionGroup (plateFrame.unitFrame [MEMBER_UNITID]))
 			end
 			if (config.indicator_enemyclass) then
 				Plater.AddIndicator (plateFrame, "classicon")
@@ -7194,7 +7194,7 @@ end
 			thisIndicator:SetTexCoord (2/32, 26/32, 1/32, 31/32)
 			
 		elseif (indicator == "classicon") then
-			local _, class = UnitClass (plateFrame [MEMBER_UNITID])
+			local _, class = UnitClass (plateFrame.unitFrame [MEMBER_UNITID])
 			if (class) then
 				thisIndicator:SetTexture ([[Interface\GLUES\CHARACTERCREATE\UI-CharacterCreate-Classes]])
 				thisIndicator:SetTexCoord (unpack (CLASS_ICON_TCOORDS [class]))
@@ -7370,7 +7370,7 @@ end
 			plateFrame.IsFriendlyPlayerWithoutHealthBar = true
 			
 		elseif (DB_PLATE_CONFIG [ACTORTYPE_FRIENDLY_PLAYER].only_damaged) then
-			if (UnitHealth (plateFrame [MEMBER_UNITID]) < UnitHealthMax (plateFrame [MEMBER_UNITID])) then
+			if (UnitHealth (plateFrame.unitFrame [MEMBER_UNITID]) < UnitHealthMax (plateFrame.unitFrame [MEMBER_UNITID])) then
 				Plater.ShowHealthBar (plateFrame.unitFrame)
 			else
 				Plater.HideHealthBar (plateFrame.unitFrame, true)
@@ -7386,7 +7386,7 @@ end
 	end
 
 	function Plater.GetPlateAlpha (plateFrame)
-		if (UnitIsUnit (plateFrame [MEMBER_UNITID], "target")) then
+		if (UnitIsUnit (plateFrame.unitFrame [MEMBER_UNITID], "target")) then
 			return 1
 		else
 			return AlphaBlending
@@ -8348,7 +8348,7 @@ end
 								auraTable.ApplyTime = GetTime() + math.random (3, 12)
 							end
 							
-							if (not UnitIsUnit (plateFrame [MEMBER_UNITID], "player")) then
+							if (not UnitIsUnit (plateFrame.unitFrame [MEMBER_UNITID], "player")) then
 								Plater.AddAura (buffFrame, auraIconFrame, index, auraTable.SpellName, auraTable.SpellTexture, auraTable.Count, "DEBUFF", auraTable.Duration, auraTable.ApplyTime+auraTable.Duration, "player", false, false, auraTable.SpellID, nil, nil, nil, nil, auraTable.Type)
 							else
 								Plater.AddAura (buffFrame, auraIconFrame, index, auraTable.SpellName, auraTable.SpellTexture, auraTable.Count, "DEBUFF", auraTable.Duration, auraTable.ApplyTime+auraTable.Duration, "player", false, false, auraTable.SpellID, false, false, true, true, auraTable.Type)
@@ -8363,7 +8363,7 @@ end
 								auraTable.ApplyTime = GetTime() + math.random (3, 12)
 							end
 							
-							if (not UnitIsUnit (plateFrame [MEMBER_UNITID], "player")) then
+							if (not UnitIsUnit (plateFrame.unitFrame [MEMBER_UNITID], "player")) then
 								Plater.AddAura (buffFrame, auraIconFrame, index, auraTable.SpellName, auraTable.SpellTexture, auraTable.Count, "DEBUFF", auraTable.Duration, auraTable.ApplyTime+auraTable.Duration, "player", false, false, auraTable.SpellID, true, nil, nil, nil, auraTable.Type)
 							else
 								Plater.AddAura (buffFrame, auraIconFrame, index, auraTable.SpellName, auraTable.SpellTexture, auraTable.Count, "DEBUFF", auraTable.Duration, auraTable.ApplyTime+auraTable.Duration, "player", false, false, auraTable.SpellID, false, false, false, true, auraTable.Type)
@@ -8390,7 +8390,7 @@ end
 								auraTable.ApplyTime = GetTime() + math.random (3, 12)
 							end
 							
-							if (not UnitIsUnit (plateFrame [MEMBER_UNITID], "player")) then
+							if (not UnitIsUnit (plateFrame.unitFrame [MEMBER_UNITID], "player")) then
 								Plater.AddAura (buffFrame, auraIconFrame, index, auraTable.SpellName, auraTable.SpellTexture, auraTable.Count, "DEBUFF", auraTable.Duration, auraTable.ApplyTime+auraTable.Duration, "player", false, false, auraTable.SpellID, nil, nil, nil, nil, auraTable.Type)
 							else
 								Plater.AddAura (buffFrame, auraIconFrame, index, auraTable.SpellName, auraTable.SpellTexture, auraTable.Count, "DEBUFF", auraTable.Duration, auraTable.ApplyTime+auraTable.Duration, "player", false, false, auraTable.SpellID, false, false, true, true, auraTable.Type)
@@ -8403,7 +8403,7 @@ end
 								auraTable.ApplyTime = GetTime() + math.random (3, 12)
 							end
 							
-							if (not UnitIsUnit (plateFrame [MEMBER_UNITID], "player")) then
+							if (not UnitIsUnit (plateFrame.unitFrame [MEMBER_UNITID], "player")) then
 								Plater.AddAura (frame, auraIconFrame, index, auraTable.SpellName, auraTable.SpellTexture, auraTable.Count, "BUFF", auraTable.Duration, auraTable.ApplyTime+auraTable.Duration, "player", false, false, auraTable.SpellID, true, nil, nil, nil, auraTable.Type)
 							else
 								Plater.AddAura (frame, auraIconFrame, index, auraTable.SpellName, auraTable.SpellTexture, auraTable.Count, "BUFF", auraTable.Duration, auraTable.ApplyTime+auraTable.Duration, "player", false, false, auraTable.SpellID, true, false, false, false, auraTable.Type)
@@ -10854,14 +10854,14 @@ end
 				
 				if (self.healthBar.CurrentHealth == 0) then
 					self.healthBar.AnimationStart = 0
-					self.healthBar.AnimationEnd = UnitHealthMax (plateFrame [MEMBER_UNITID])
+					self.healthBar.AnimationEnd = UnitHealthMax (plateFrame.unitFrame [MEMBER_UNITID])
 				else
-					self.healthBar.AnimationStart = UnitHealthMax (plateFrame [MEMBER_UNITID])
+					self.healthBar.AnimationStart = UnitHealthMax (plateFrame.unitFrame [MEMBER_UNITID])
 					self.healthBar.AnimationEnd = 0
 				end
 				
 				self.healthBar:SetValue (self.healthBar.CurrentHealth)
-				self.healthBar.CurrentHealthMax = UnitHealthMax (plateFrame [MEMBER_UNITID])
+				self.healthBar.CurrentHealthMax = UnitHealthMax (plateFrame.unitFrame [MEMBER_UNITID])
 				
 				self.healthBar.IsAnimating = true
 				
