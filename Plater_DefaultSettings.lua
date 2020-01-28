@@ -733,12 +733,13 @@ PLATER_DEFAULT_SETTINGS = {
 		not_affecting_combat_enabled = false,
 		not_affecting_combat_alpha = 0.6,
 		
-		range_check_enabled = false,
+		range_check_enabled = true,
 		range_check_alpha = 1, --overall as it set in the unitFrame
 		range_check_health_bar_alpha = 0.65,
 		range_check_cast_bar_alpha = 0.85,
 		range_check_buffs_alpha = 0.85,
 		range_check_power_bar_alpha = 0.85,
+		range_check_in_range_or_target_alpha = 0.9, 
 		
 		target_highlight = true,
 		target_highlight_alpha = 0.75,
