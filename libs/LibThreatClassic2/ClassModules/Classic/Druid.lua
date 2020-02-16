@@ -1,5 +1,6 @@
 if not _G.THREATLIB_LOAD_MODULES then return end -- only load if LibThreatClassic2.lua allows it
-local ThreatLib = LibStub and LibStub("LibThreatClassic2", true)
+if not LibStub then return end
+local ThreatLib, MINOR = LibStub("LibThreatClassic2", true)
 if not ThreatLib then return end
 
 if select(2, _G.UnitClass("player")) ~= "DRUID" then return end
@@ -11,7 +12,7 @@ local GetTalentInfo = _G.GetTalentInfo
 local GetShapeshiftForm = _G.GetShapeshiftForm
 local UnitGUID = _G.UnitGUID
 
-local Druid = ThreatLib:GetOrCreateModule("Player")
+local Druid = ThreatLib:GetOrCreateModule("Player-r"..MINOR)
 
 local faerieFireFactor = 108 / 54	-- NEED MORE INFO
 
@@ -61,11 +62,9 @@ function Druid:ClassInit()
 	for k, v in pairs(threatValues.cower) do
 		self.CastLandedHandlers[k] = self.Cower
 	end
+
 	for k, v in pairs(threatValues.demoralizingRoar) do
-		self.CastHandlers[k] = self.DemoralizingRoar
-	end
-	for k, v in pairs(threatValues.demoralizingRoar) do
-		self.CastMissHandlers[k] = self.DemoralizingRoarMiss
+		self.MobDebuffHandlers[k] = self.DemoralizingRoar
 	end
 
 	-- Subtlety for all Arcane or Nature Damage, as well as heals.
@@ -171,11 +170,7 @@ function Druid:Cower(spellID, target)
 end
 
 function Druid:DemoralizingRoar(spellID, target)
-	self:AddThreat(threatValues.demoralizingRoar[spellID] * self:threatMods())
-end
-
-function Druid:DemoralizingRoarMiss(spellID, target)
-	self:rollbackTransaction(target, spellID)
+	self:AddTargetThreat(target, threatValues.demoralizingRoar[spellID] * self:threatMods())
 end
 
 function Druid:Subtlety(amount)
