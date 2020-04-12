@@ -19,7 +19,7 @@ Usage example 1:
 --]================]
 if WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC then return end
 
-local MAJOR, MINOR = "LibClassicDurations", 44
+local MAJOR, MINOR = "LibClassicDurations", 52
 local lib = LibStub:NewLibrary(MAJOR, MINOR)
 if not lib then return end
 
@@ -214,18 +214,18 @@ local function addDRLevel(dstGUID, category)
 
     local catTable = guidTable[category]
     if not catTable then
-        guidTable[category] = {}
+        guidTable[category] = { level = 0, expires = 0}
         catTable = guidTable[category]
     end
 
     local now = GetTime()
     local isExpired = (catTable.expires or 0) <= now
-    if isExpired then
-        catTable.level = 1
-        catTable.expires = now + DRResetTime
-    else
-        catTable.level = catTable.level + 1
+    local oldDRLevel = catTable.level
+    if isExpired or oldDRLevel >= 3 then
+        catTable.level = 0
     end
+    catTable.level = catTable.level + 1
+    catTable.expires = now + DRResetTime
 end
 local function clearDRs(dstGUID)
     DRInfo[dstGUID] = nil
@@ -311,7 +311,7 @@ local function cleanDuration(duration, spellID, srcGUID, comboPoints)
     return duration
 end
 
-local function RefreshTimer(srcGUID, dstGUID, spellID)
+local function RefreshTimer(srcGUID, dstGUID, spellID, overrideTime)
     local guidTable = guids[dstGUID]
     if not guidTable then return end
 
@@ -326,8 +326,9 @@ local function RefreshTimer(srcGUID, dstGUID, spellID)
     end
     if not applicationTable then return end
 
-    applicationTable[2] = GetTime() -- set start time to now
-    return true
+    local oldStartTime = applicationTable[2]
+    applicationTable[2] = overrideTime or GetTime() -- set start time to now
+    return true, oldStartTime
 end
 
 local function SetTimer(srcGUID, dstGUID, dstName, dstFlags, spellID, spellName, opts, auraType, doRemove)
@@ -450,6 +451,7 @@ function f:COMBAT_LOG_EVENT_UNFILTERED(event)
     return self:CombatLogHandler(CombatLogGetCurrentEventInfo())
 end
 
+local rollbackTable = setmetatable({}, { __mode="v" })
 local function ProcIndirectRefresh(eventType, spellName, srcGUID, srcFlags, dstGUID, dstFlags, dstName)
     if indirectRefreshSpells[spellName] then
         local refreshTable = indirectRefreshSpells[spellName]
@@ -477,7 +479,14 @@ local function ProcIndirectRefresh(eventType, spellName, srcGUID, srcFlags, dstG
                     SetTimer(srcGUID, dstGUID, dstName, dstFlags, targetSpellID, targetSpellName, opts, targetAuraType)
                 end
             else
-                RefreshTimer(srcGUID, dstGUID, targetSpellID)
+                local _, oldStartTime = RefreshTimer(srcGUID, dstGUID, targetSpellID)
+
+                if refreshTable.rollbackMisses and oldStartTime then
+                    rollbackTable[srcGUID] = rollbackTable[srcGUID] or {}
+                    rollbackTable[srcGUID][dstGUID] = rollbackTable[srcGUID][dstGUID] or {}
+                    local now = GetTime()
+                    rollbackTable[srcGUID][dstGUID][targetSpellID] = {now, oldStartTime}
+                end
             end
         end
     end
@@ -489,14 +498,35 @@ function f:CombatLogHandler(...)
     dstGUID, dstName, dstFlags, dstFlags2,
     spellID, spellName, spellSchool, auraType = ...
 
-
     ProcIndirectRefresh(eventType, spellName, srcGUID, srcFlags, dstGUID, dstFlags, dstName)
 
     if  eventType == "SPELL_MISSED" and
         bit_band(srcFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) == COMBATLOG_OBJECT_AFFILIATION_MINE
     then
         local missType = auraType
-        if missType == "RESIST" then
+        -- ABSORB BLOCK DEFLECT DODGE EVADE IMMUNE MISS PARRY REFLECT RESIST
+        if not (missType == "ABSORB" or missType == "BLOCK") then -- not sure about those two
+
+            local refreshTable = indirectRefreshSpells[spellName]
+            -- This is just for Sunder Armor misses
+            if refreshTable and refreshTable.rollbackMisses then
+                local rollbacksFromSource = rollbackTable[srcGUID]
+                if rollbacksFromSource then
+                    local rollbacks = rollbacksFromSource[dstGUID]
+                    if rollbacks then
+                        local targetSpellID = refreshTable.targetSpellID
+                        local snapshot = rollbacks[targetSpellID]
+                        if snapshot then
+                            local timestamp, oldStartTime = unpack(snapshot)
+                            local now = GetTime()
+                            if now - timestamp < 0.5 then
+                                RefreshTimer(srcGUID, dstGUID, targetSpellID, oldStartTime)
+                            end
+                        end
+                    end
+                end
+            end
+
             spellID = GetLastRankSpellID(spellName)
             if not spellID then
                 return
@@ -633,7 +663,8 @@ local makeBuffInfo = function(spellID, applicationTable, dstGUID, srcGUID)
     end
     local now = GetTime()
     if expirationTime > now then
-        return { name, icon, 0, nil, duration, expirationTime, nil, nil, nil, spellID, false, false, false, false, 1 }
+        local buffType = spells[spellID] and spells[spellID].buffType
+        return { name, icon, 0, buffType, duration, expirationTime, nil, nil, nil, spellID, false, false, false, false, 1 }
     end
 end
 
@@ -846,7 +877,8 @@ function lib:GetDurationForRank(spellName, spellID, srcGUID)
     end
 end
 
-local activeFrames = {}
+lib.activeFrames = lib.activeFrames or {}
+local activeFrames = lib.activeFrames
 function lib:RegisterFrame(frame)
     activeFrames[frame] = true
     if next(activeFrames) then
