@@ -8419,6 +8419,7 @@ end
 
 					local buffFrame = plateFrame.unitFrame.BuffFrame
 					local buffFrame2 = plateFrame.unitFrame.BuffFrame2
+					local unitAuraCache = plateFrame.unitFrame.AuraCache
 					
 					buffFrame:SetAlpha (DB_AURA_ALPHA)
 					buffFrame2:SetAlpha (DB_AURA_ALPHA)

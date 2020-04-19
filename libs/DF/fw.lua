@@ -917,7 +917,7 @@ end
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --> menus
-+	local getMenuWidgetVolative = function(parent, widgetType, indexTable)
+	local getMenuWidgetVolative = function(parent, widgetType, indexTable)
 		if (widgetType == "label") then
 			local widget = parent.widget_list_by_type[widgetType][indexTable[widgetType]]
 			if (not widget) then
