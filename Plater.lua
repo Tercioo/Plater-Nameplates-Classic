@@ -2465,6 +2465,10 @@ Plater.DefaultSpellRangeList = {
 				plateFrame.unitFrame.ExtraIconFrame.AuraCache = {}
 				--> cache the extra icon frame inside the buff frame for speed
 				plateFrame.unitFrame.BuffFrame.ExtraIconFrame = plateFrame.unitFrame.ExtraIconFrame
+				
+			--> Support for DBM and BigWigs Nameplate Auras
+				Plater.CreateBossModAuraFrame(plateFrame.unitFrame)
+			
 			
 			--> 3D model frame
 				plateFrame.Top3DFrame = CreateFrame ("playermodel", plateFrame:GetName() .. "3DFrame", plateFrame, "ModelWithControlsTemplate")
@@ -3054,6 +3058,7 @@ function Plater.OnInit() --private
 			Plater.Masque.AuraFrame1 = Masque:Group ("Plater Nameplates", "Aura Frame 1")
 			Plater.Masque.AuraFrame2 = Masque:Group ("Plater Nameplates", "Aura Frame 2")
 			Plater.Masque.BuffSpecial = Masque:Group ("Plater Nameplates", "Buff Special")
+			Plater.Masque.BossModIconFrame = Masque:Group ("Plater Nameplates", "Boss Mod Icons")
 		end
 	
 	--set some cvars that we want to set
@@ -4048,6 +4053,7 @@ end
 			Plater.Masque.AuraFrame1:ReSkin()
 			Plater.Masque.AuraFrame2:ReSkin()
 			Plater.Masque.BuffSpecial:ReSkin()
+			Plater.Masque.BossModIconFrame:ReSkin()
 		end
 	end
 	
@@ -5562,6 +5568,8 @@ end
 				tickFrame.BuffFrame:SetAlpha (DB_AURA_ALPHA)
 				tickFrame.BuffFrame2:SetAlpha (DB_AURA_ALPHA)
 			end
+			-- update DBM and BigWigs nameplate auras
+			Plater.UpdateBossModAuras(unitFrame)
 			
 			--set the delay to perform another update
 			tickFrame.ThrottleUpdate = DB_TICK_THROTTLE
@@ -6999,6 +7007,9 @@ end
 			--> update refresh ID
 			unitFrame.ExtraIconFrame.RefreshID = PLATER_REFRESH_ID
 		end
+		
+		--update options in the boss mods icons frame
+		Plater.UpdateBossModAuraFrameSettings(unitFrame, PLATER_REFRESH_ID)
 		
 		--> details! integration
 		if (IS_USING_DETAILS_INTEGRATION) then
