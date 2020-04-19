@@ -6716,7 +6716,7 @@ end
 		unitFrame.actorType = actorType
 		unitFrame.ActorType = actorType --exposed to scripts
 		
-		local shouldForceRefresh = false
+		local shouldForceRefresh = justAdded or forceUpdate
 		if (plateFrame.IsNpcWithoutHealthBar or plateFrame.IsFriendlyPlayerWithoutHealthBar) then
 			shouldForceRefresh = true
 			plateFrame.IsNpcWithoutHealthBar = false
