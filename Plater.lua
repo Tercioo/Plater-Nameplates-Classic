@@ -6917,6 +6917,9 @@ end
 					else
 						Plater.ChangeHealthBarColor_Internal (healthBar, unpack (DB_PLATE_CONFIG [actorType].fixed_class_color))
 					end
+				else
+					-- could be a pet
+					Plater.ForceFindPetOwner (plateFrame [MEMBER_GUID])
 				end
 			end
 
