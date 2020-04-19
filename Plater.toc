@@ -1,4 +1,4 @@
-## Interface: 11303
+## Interface: 11304
 ## Title: Plater
 ## Notes: Nameplate addon designed for advanced users.
 ## SavedVariables: PlaterDB
