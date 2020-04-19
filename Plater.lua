@@ -8088,6 +8088,7 @@ end
 		tooltipFrame:SetHyperlink ("unit:" .. serial or "")
 		
 		local isPlayerPet = false
+		local isOtherPet = false
 		
 		local line1 = _G ["PlaterPetOwnerFinderTextLeft2"]
 		local text1 = line1 and line1:GetText()
@@ -8096,10 +8097,12 @@ end
 			local playerName = pName:gsub ("%-.*", "") --remove realm name
 			if (text1:find (playerName)) then
 				isPlayerPet = true
+			elseif (string.match(text1, string.gsub(UNITNAME_TITLE_PET, "%%s", "(%.*)")) or string.match(text1, string.gsub(UNITNAME_TITLE_MINION, "%%s", "(%.*)"))) then
+				isOtherPet = true
 			end
 		end
 		
-		if (not isPlayerPet) then
+		if (not isPlayerPet and not isOtherPet) then
 			local line2 = _G ["PlaterPetOwnerFinderTextLeft3"]
 			local text2 = line2 and line2:GetText()
 			if (text2 and text2 ~= "") then
@@ -8107,15 +8110,19 @@ end
 				local playerName = pName:gsub ("%-.*", "") --remove realm name
 				if (text2:find (playerName)) then
 					isPlayerPet = true
+				elseif (string.match(text2, string.gsub(UNITNAME_TITLE_PET, "%%s", "(%.*)")) or string.match(text2, string.gsub(UNITNAME_TITLE_MINION, "%%s", "(%.*)"))) then
+					isOtherPet = true
 				end
 			end
 		end
 		
-		if (not isPlayerPet) then
-			Plater.NpcBlackList [serial] = true
-		else
+		if (isPlayerPet) then
 			PET_CACHE [serial] = time()
 			Plater.PlayerPetCache [serial] = time()
+		elseif (isOtherPet) then
+			PET_CACHE [serial] = time()
+		else
+			Plater.NpcBlackList [serial] = true
 		end
 	end
 	
