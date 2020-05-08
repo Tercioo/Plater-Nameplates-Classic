@@ -79,6 +79,16 @@ local Plater = DF:CreateAddOn ("Plater", "PlaterDB", PLATER_DEFAULT_SETTINGS, { 
 	}
 })
 
+Plater.versionString = GetAddOnMetadata("Plater", "Version") or GetAddOnMetadata("Plater_dev", "Version")
+Plater.fullVersionInfo = Plater.versionString .. " - DetailsFramework v" .. select(2,LibStub:GetLibrary("DetailsFramework-1.0"))
+function Plater.GetVersionInfo(printOut)
+	-- update, just in case...
+	Plater.versionString = GetAddOnMetadata("Plater", "Version") or GetAddOnMetadata("Plater_dev", "Version")
+	Plater.fullVersionInfo = Plater.versionString .. " - DetailsFramework v" .. select(2,LibStub:GetLibrary("DetailsFramework-1.0"))
+	if printOut then print("Plater version info:\n" .. Plater.fullVersionInfo) end
+	return Plater.fullVersionInfo
+end
+
 -- support for LibClassicDurations from https://github.com/rgd87/LibClassicDurations by d87
 local UnitAura = _G.UnitAura
 local LCD = LibStub:GetLibrary("LibClassicDurations", true)
