@@ -19,7 +19,7 @@ Usage example 1:
 --]================]
 if WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC then return end
 
-local MAJOR, MINOR = "LibClassicDurations", 52
+local MAJOR, MINOR = "LibClassicDurations", 56
 local lib = LibStub:NewLibrary(MAJOR, MINOR)
 if not lib then return end
 
@@ -76,6 +76,7 @@ local GetTime = GetTime
 local tinsert = table.insert
 local unpack = unpack
 local GetAuraDurationByUnitDirect
+local GetGUIDAuraTime
 
 if lib.enableEnemyBuffTracking == nil then lib.enableEnemyBuffTracking = false end
 local enableEnemyBuffTracking = lib.enableEnemyBuffTracking
@@ -677,30 +678,34 @@ local shouldDisplayAura = function(auraTable)
     return false
 end
 
-local function RegenerateBuffList(dstGUID)
-    local guidTable = guids[dstGUID]
-    if not guidTable then
-        return
-    end
-
+lib.scanTip = lib.scanTip or CreateFrame("GameTooltip", "LibClassicDurationsScanTip", nil, "GameTooltipTemplate")
+local scanTip = lib.scanTip
+scanTip:SetOwner(WorldFrame, "ANCHOR_NONE")
+local function RegenerateBuffList(unit, dstGUID)
     local buffs = {}
-    for spellID, t in pairs(guidTable) do
-        if t.applications then
-            for srcGUID, auraTable in pairs(t.applications) do
-                if auraTable[3] == "BUFF" then
-                    local buffInfo = makeBuffInfo(spellID, auraTable, dstGUID, srcGUID)
-                    if buffInfo then
-                        tinsert(buffs, buffInfo)
-                    end
+    local spellName
+    for i=1, 32 do
+        scanTip:ClearLines()
+        scanTip:SetUnitAura(unit, i, "HELPFUL")
+        spellName = LibClassicDurationsScanTipTextLeft1:GetText()
+        if spellName then
+            local spellID = GetLastRankSpellID(spellName)
+            if spellID then
+                local icon = GetSpellTexture(spellID)
+                local opts = spells[spellID]
+                local buffInfo = { spellName, icon, 0, (opts and opts.buffType), 0, 0, nil, nil, nil, spellID, false, false, false, false, 1 }
+                local isStacking = opts and opts.stacking
+                local srcGUID = nil
+                local duration, expirationTime = GetGUIDAuraTime(dstGUID, spellName, spellID, srcGUID, isStacking)
+                if duration then
+                    buffInfo[5] = duration
+                    buffInfo[6] = expirationTime
                 end
+
+                tinsert(buffs, buffInfo)
             end
         else
-            if t[3] == "BUFF" then
-                local buffInfo = makeBuffInfo(spellID, t, dstGUID)
-                if buffInfo then
-                    tinsert(buffs, buffInfo)
-                end
-            end
+            break
         end
     end
 
@@ -725,7 +730,7 @@ function lib.UnitAuraDirect(unit, index, filter)
         if not unitGUID then return end
         local isValid = buffCacheValid[unitGUID]
         if not isValid or isValid < GetTime() then
-            RegenerateBuffList(unitGUID)
+            RegenerateBuffList(unit, unitGUID)
         end
 
         local buffCacheHit = buffCache[unitGUID]
@@ -780,7 +785,7 @@ end
 ---------------------------
 -- PUBLIC FUNCTIONS
 ---------------------------
-local function GetGUIDAuraTime(dstGUID, spellName, spellID, srcGUID, isStacking, forcedNPCDuration)
+GetGUIDAuraTime = function(dstGUID, spellName, spellID, srcGUID, isStacking, forcedNPCDuration)
     local guidTable = guids[dstGUID]
     if guidTable then
 
@@ -951,5 +956,92 @@ function lib:MonitorUnit(unit)
         lib.debug:UnregisterAllEvents()
         lib.debug.enabled = false
         print("[LCD] Disabled combat log event display")
+    end
+end
+
+------------------
+-- Set Tracking
+------------------
+
+
+local itemSets = {}
+
+function lib:TrackItemSet(setname, itemArray)
+    itemSets[setname] = itemSets[setname] or {}
+    if not itemSets[setname].items then
+        itemSets[setname].items = {}
+        itemSets[setname].callbacks = {}
+        local bitems = itemSets[setname].items
+        for _, itemID in ipairs(itemArray) do
+            bitems[itemID] = true
+        end
+    end
+end
+function lib:RegisterSetBonusCallback(setname, pieces, handle_on, handle_off)
+    local set = itemSets[setname]
+    if not set then error(string.format("Itemset '%s' is not registered", setname)) end
+    set.callbacks[pieces] = {}
+    set.callbacks[pieces].equipped = false
+    set.callbacks[pieces].on = handle_on
+    set.callbacks[pieces].off = handle_off
+end
+
+function lib:IsSetBonusActive(setname, bonusLevel)
+    local set = itemSets[setname]
+    if not set then return false end
+    local setCallbacks = set.callbacks
+    if setCallbacks[bonusLevel] and setCallbacks[bonusLevel].equipped then
+        return true
+    end
+    return false
+end
+
+
+function lib:IsSetBonusActiveFullCheck(setname, bonusLevel)
+    local set = itemSets[setname]
+    if not set then return false end
+    local set_items = set.items
+    local pieces_equipped = 0
+    for slot=1,17 do
+        local itemID = GetInventoryItemID("player", slot)
+        if set_items[itemID] then pieces_equipped = pieces_equipped + 1 end
+    end
+    return (pieces_equipped >= bonusLevel)
+end
+
+
+lib.setwatcher = lib.setwatcher or CreateFrame("Frame", nil, UIParent)
+local setwatcher = lib.setwatcher
+setwatcher:SetScript("OnEvent", function(self, event, ...)
+    return self[event](self, event, ...)
+end)
+setwatcher:RegisterEvent("PLAYER_LOGIN")
+function setwatcher:PLAYER_LOGIN()
+    if next(itemSets) then
+        self:RegisterUnitEvent("UNIT_INVENTORY_CHANGED", "player")
+        self:UNIT_INVENTORY_CHANGED(nil, "player")
+    end
+end
+function setwatcher:UNIT_INVENTORY_CHANGED(event, unit)
+    for setname, set in pairs(itemSets) do
+        local set_items = set.items
+        local pieces_equipped = 0
+        for slot=1,17 do -- That excludes ranged slot in classic
+            local itemID = GetInventoryItemID("player", slot)
+            if set_items[itemID] then pieces_equipped = pieces_equipped + 1 end
+        end
+        for bp, bonus in pairs(set.callbacks) do
+            if pieces_equipped >= bp then
+                if not bonus.equipped then
+                    if bonus.on then bonus.on() end
+                    bonus.equipped = true
+                end
+            else
+                if bonus.equipped then
+                    if bonus.off then bonus.off() end
+                    bonus.equipped = false
+                end
+            end
+        end
     end
 end
