@@ -4178,6 +4178,9 @@ Plater.CreateAuraTesting()
 				return
 			end
 			
+			-- ensure proper name (case sensitive)
+			text = GetSpellInfo (spellID)
+			
 			return text
 		end		
 		
