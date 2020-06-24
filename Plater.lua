@@ -9681,6 +9681,20 @@ end
 			end
 		end
 	end
+	
+	--recompile a single scriptObject deleting the global environment
+	function Plater.RecompileScript(scriptObject)
+		local scriptType = Plater.GetScriptType(scriptObject)
+		if (scriptType == "script") then
+			PLATER_GLOBAL_SCRIPT_ENV [scriptObject.Name] = nil
+			Plater.CompileScript(scriptObject)
+
+		elseif (scriptType == "hook") then
+			PLATER_GLOBAL_MOD_ENV [scriptObject.Name] = nil
+			Plater.CompileHook(scriptObject)
+		end
+	end
+
 
 	--when a script object get disabled, need to clear all compiled scripts in the cache and recompile than again
 	--this other scripts that uses the same trigger name get activated
@@ -9987,6 +10001,17 @@ end
 			end		
 		end
 	end
+
+	-- which option types should be copied to modTable.config?
+	local options_for_config_table = {
+		[1] = true, -- Color
+		[2] = true, -- Number
+		[3] = true, -- Text
+		[4] = true, -- Toggle
+		[5] = false, -- Label
+		[6] = false, -- Blank Line
+		[7] = true -- Texture
+	}
 	
 	--compile scripts from the Hooking tab
 	function Plater.CompileHook (scriptObject)
@@ -10068,7 +10093,22 @@ end
 		local needsInitCall = false
 		if not PLATER_GLOBAL_MOD_ENV [scriptObject.Name] then
 			needsInitCall = true
-			PLATER_GLOBAL_MOD_ENV [scriptObject.Name] = {}
+			PLATER_GLOBAL_MOD_ENV [scriptObject.Name] = {
+				config = {}
+			}
+		end
+
+		--copy options to global env
+		-- ensure options are valid:
+		Plater.CreateOptionTableForScriptObject(scriptObject)
+		local scriptOptions = scriptObject.Options
+		local scriptOptionsValues = scriptObject.OptionsValues
+
+		for i = 1, #scriptOptions do
+			local thisOption = scriptOptions[i]
+			if options_for_config_table[thisOption.Type] then
+				PLATER_GLOBAL_MOD_ENV [scriptObject.Name].config[thisOption.Key] = scriptOptionsValues[thisOption.Key] or thisOption.Value
+			end
 		end
 		
 		--compile
@@ -10145,7 +10185,22 @@ end
 		local needsInitCall = false
 		if not PLATER_GLOBAL_SCRIPT_ENV [scriptObject.Name] then
 			needsInitCall = true
-			PLATER_GLOBAL_SCRIPT_ENV [scriptObject.Name] = {}
+			PLATER_GLOBAL_SCRIPT_ENV [scriptObject.Name] = {
+				config = {}
+			}
+		end
+
+		--copy options to global env
+		-- ensure options are valid:
+		Plater.CreateOptionTableForScriptObject(scriptObject)
+		local scriptOptions = scriptObject.Options
+		local scriptOptionsValues = scriptObject.OptionsValues
+
+		for i = 1, #scriptOptions do
+			local thisOption = scriptOptions[i]
+			if options_for_config_table[thisOption.Type] then
+				PLATER_GLOBAL_SCRIPT_ENV [scriptObject.Name].config[thisOption.Key] = scriptOptionsValues[thisOption.Key] or thisOption.Value
+			end
 		end
 
 		--compile
@@ -10178,7 +10233,7 @@ end
 				if (type (triggerId) == "number") then
 					triggerId = GetSpellInfo (triggerId)
 					if (not triggerId) then
-						--Plater:Msg ("failed to get the spell name for spellId: " .. (scriptObject [triggerContainer] [i] or "invalid spellId"))
+						Plater:Msg ("failed to get the spell name for spellId: " .. (scriptObject [triggerContainer] [i] or "invalid spellId"))
 					end
 				end
 			
@@ -10230,9 +10285,9 @@ end
 				end
 				
 				--run initialization (once)
-				if not needsInitCall then
+				if needsInitCall then
 					Plater.ScriptMetaFunctions.ScriptRunInitialization(globalScriptObject)
-					needsInitCall = true
+					needsInitCall = false
 				end
 			end
 		end
@@ -10449,6 +10504,28 @@ end
 		end
 	end
 
+	
+	--merge/clean up user options
+	function Plater.UpdateOptionsForModScriptImport(scriptObjectNew, scriptObjectOld)
+		if not scriptObjectNew or not scriptObjectOld then return end
+		
+		--consistency/init:
+		scriptObjectNew.OptionsValues = scriptObjectNew.OptionsValues or {}
+		scriptObjectNew.Options = scriptObjectNew.Options or {}
+		scriptObjectOld.scriptObjectOld = scriptObjectOld.scriptObjectOld or {}
+		
+		local newUserOptions = scriptObjectNew.OptionsValues
+		local newOptions = scriptObjectNew.Options
+		local oldUserOptions = scriptObjectOld.OptionsValues
+		
+		for i=1, #newOptions do
+			local newOption = newOptions[i]
+			if newOption.Key and oldUserOptions[newOption.Key] then
+				newUserOptions[newOption.Key] = oldUserOptions[newOption.Key]
+			end
+		end
+	end
+
 	--import a string from any source with more options than the convencional importer
 	--this is used when importing scripts from the library and when the user inserted the wrong script type in the import box at hook or script, e.g. imported a hook in the script import box
 	--guarantee to always receive a 'print' type of encode
@@ -10509,6 +10586,8 @@ end
 								--keep the enabled state
 								newScript.Enabled = scriptObject.Enabled
 								
+								Plater.UpdateOptionsForModScriptImport(newScript, scriptObject)
+								
 								--replace the old script with the new one
 								tremove (scriptDB, i)
 								tinsert (scriptDB, i, newScript)
@@ -10555,6 +10634,8 @@ end
 								
 								--keep the enabled state
 								newScript.Enabled = scriptObject.Enabled
+								
+								Plater.UpdateOptionsForModScriptImport(newScript, scriptObject)
 								
 								--replace the old script with the new one
 								tremove (scriptDB, i)
@@ -10607,6 +10688,7 @@ end
 	function Plater.AddScript (scriptObjectToAdd, noOverwrite)
 		if (scriptObjectToAdd) then
 			local indexToReplace
+			local existingScriptObject
 			local scriptType = Plater.GetScriptType (scriptObjectToAdd)
 			local scriptDB = Plater.GetScriptDB (scriptType)
 			
@@ -10619,6 +10701,7 @@ end
 						return
 					else
 						indexToReplace = i
+						existingScriptObject = scriptObject
 						break
 					end
 				end
@@ -10626,6 +10709,7 @@ end
 			
 			if (indexToReplace) then
 				--remove the old script and add the new one
+				Plater.UpdateOptionsForModScriptImport(scriptObjectToAdd, existingScriptObject)
 				tremove (scriptDB, indexToReplace)
 				tinsert (scriptDB, indexToReplace, scriptObjectToAdd)
 			else
@@ -10658,6 +10742,8 @@ end
 				scriptObject.Hooks [hookName] = hookCode
 			end
 			
+			scriptObject.Options = indexTable.options
+
 			scriptObject.url         = indexTable.url or ""
 			scriptObject.version = indexTable.version or -1
 			scriptObject.semver  = indexTable.semver or ""
@@ -10678,6 +10764,7 @@ end
 			scriptObject.Time  		= indexTable ["8"]
 			scriptObject.Revision  		= indexTable ["9"]
 			scriptObject.PlaterCore  	= indexTable ["10"]
+			scriptObject.Options = indexTable.options
 			scriptObject.url  	 = indexTable.url or ""
 			scriptObject.version = indexTable.version or -1
 			scriptObject.semver  = indexTable.semver or ""
@@ -10710,7 +10797,8 @@ end
 	end
 
 	--make an indexScriptTable for the script object using indexes instead of key to decrease the size of the string to be exported
-	function Plater.PrepareTableToExport (scriptObject)
+	--function Plater.PrepareTableToExport (scriptObject)
+	function Plater.PrepareTableToExport_OLD (scriptObject)
 		
 		if (scriptObject.Hooks) then
 			--script for hooks
@@ -10755,8 +10843,8 @@ end
 		end
 	end
 	
-	function Plater.PrepareTableToExportStringIndexes (scriptObject)
-	--function Plater.PrepareTableToExport (scriptObject)
+	--function Plater.PrepareTableToExportStringIndexes (scriptObject)
+	function Plater.PrepareTableToExport (scriptObject)
 		
 		if (scriptObject.Hooks) then
 			--script for hooks
@@ -10776,8 +10864,10 @@ end
 				t ["9"] [hookName] = hookCode
 			end
 			
-			t["options"] = scriptObject.Options or {}
+			t ["options"] = scriptObject.Options or {}
 			
+			t ["addon"] = "Plater"
+			t ["tocversion"] = select(4, GetBuildInfo()) -- provide export toc
 			t ["type"] = "hook"
 			
 			return t
@@ -10801,8 +10891,10 @@ end
 				t [(10 + i)..""] = scriptObject [memberName]
 			end
 			
-			t["options"] = scriptObject.Options or {}
+			t ["options"] = scriptObject.Options or {}
 			
+			t ["addon"] = "Plater"
+			t ["tocversion"] = select(4, GetBuildInfo()) -- provide export toc
 			t ["type"] = "script"
 			
 			return t
