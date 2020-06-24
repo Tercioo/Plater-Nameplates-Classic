@@ -8,6 +8,16 @@ function Plater.GetChangelogTable()
 	if (not Plater.ChangeLogTable) then
 		Plater.ChangeLogTable = {
 		
+			{1593011350,  "Bug Fix", "June 24th, 2020", "Fixing an issue with reputation standing showing on friendly NPCs instead of the unit title when color blind mode is enabled."},
+			{1593011350,  "New Feature", "June 24th, 2020", "Introducing 'Custom Options' for Mods and Scripts as per profile settings for the mod/script."},
+			{1593011350,  "New Feature", "June 24th, 2020", "Profile updates from wago.io through the companion app will now keep additionally imported mods/scripts which were not part of the profile."},
+			{1593011350,  "Bug Fix", "June 24th, 2020", "Fixing buff special tracking being case sensitive and auto-suggest being all lower-case."},
+			
+			{1593011350,  "New Feature", "June 24th, 2020", "Adding options to skip or ignore profile updates."},
+			{1593011350,  "New Feature", "June 24th, 2020", "Adding options to skip or ignore a mod/script updates."},
+			{1593011350,  "New Feature", "June 24th, 2020", "Wago-Icons on Mods/Scripts are now clickable to update."},
+			{1593011350,  "Bug Fix", "Jne 24nd, 2020", "Range/Target alpha should now update properly."},
+		
 			{1588949935,  "New Feature", "May 7th, 2020", "Adding 'Plater.GetVersionInfo(<printOut - bool>)' function to get current version information."},
 			{1588949935,  "Bug Fix", "May 7th, 2020", "Spell names are now truncated properly accordingly to the nameplate size."},
 			{1588949935,  "Bug Fix", "Apr 29th, 2020", "Shield Absorb indicators are now updated properly when showing the plate for the first time."},
