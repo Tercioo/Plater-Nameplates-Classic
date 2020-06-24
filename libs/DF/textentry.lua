@@ -22,6 +22,8 @@ do
 	local metaPrototype = {
 		WidgetType = "textentry",
 		SetHook = DF.SetHook,
+		HasHook = DF.HasHook,
+		ClearHooks = DF.ClearHooks,
 		RunHooksForWidget = DF.RunHooksForWidget,
 	}
 
@@ -302,6 +304,12 @@ DF.TextEntryCounter = DF.TextEntryCounter or 1
 			if (self.editbox.borderframe) then
 				self.editbox.borderframe:SetBackdropColor (.5, .5, .5, .5)
 			end
+		end
+	end
+
+	function TextEntryMetaFunctions:SetCommitFunction(func)
+		if (type(func) == "function") then
+			self.func = func
 		end
 	end
 	
@@ -1103,7 +1111,7 @@ function DF:NewSpecialLuaEditorEntry (parent, w, h, member, name, nointent, show
 	scrollframe.editbox:SetScript ("OnEscapePressed", _G.EditBox_ClearFocus)
 	scrollframe.editbox:SetFontObject ("GameFontHighlightSmall")
 	scrollframe:SetScrollChild (scrollframe.editbox)
-	
+
 	--line number
 	if (showLineNumbers) then
 		scrollframeNumberLines.editbox = CreateFrame ("editbox", "$parentLineNumbers", scrollframeNumberLines)
@@ -1171,7 +1179,6 @@ function DF:NewSpecialLuaEditorEntry (parent, w, h, member, name, nointent, show
 	scrollframe:SetScript ("OnSizeChanged", function (self)
 		scrollframe.editbox:SetSize (self:GetSize())
 	end)
-	
 	
 	scrollframe.editbox:SetJustifyH ("left")
 	scrollframe.editbox:SetJustifyV ("top")
