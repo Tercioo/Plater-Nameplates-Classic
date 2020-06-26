@@ -1116,7 +1116,7 @@ Plater.DefaultSpellRangeList = {
 			Plater.PlayerIsTank = true
 		else
 			TANK_CACHE [UnitName ("player")] = false
-			Plater.PlayerIsTank = false
+			Plater.PlayerIsTank = false or Plater.db.profile.tank_threat_colors
 		end
 	end
 	
@@ -1124,8 +1124,6 @@ Plater.DefaultSpellRangeList = {
 	--this is called when the player enter, leave or when the group roster is changed
 	--tank cache is used mostly in the aggro check to know if the player is a tank
 	function Plater.RefreshTankCache() --private
-		Plater.PlayerIsTank = Plater.db.profile.tank_threat_colors
-	
 		wipe (TANK_CACHE)
 		
 		--add the player to the tank pool if the player is a tank

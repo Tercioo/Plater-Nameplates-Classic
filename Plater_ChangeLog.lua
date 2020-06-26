@@ -8,6 +8,7 @@ function Plater.GetChangelogTable()
 	if (not Plater.ChangeLogTable) then
 		Plater.ChangeLogTable = {
 		
+			{1593011350,  "Bug Fix", "June 26th, 2020", "Fixing an issue with the 'Use Tank Threat Colors' setting not applying properly."},
 			{1593011350,  "Bug Fix", "June 24th, 2020", "Fixing an issue with reputation standing showing on friendly NPCs instead of the unit title when color blind mode is enabled."},
 			{1593011350,  "New Feature", "June 24th, 2020", "Introducing 'Custom Options' for Mods and Scripts as per profile settings for the mod/script."},
 			{1593011350,  "New Feature", "June 24th, 2020", "Profile updates from wago.io through the companion app will now keep additionally imported mods/scripts which were not part of the profile."},
