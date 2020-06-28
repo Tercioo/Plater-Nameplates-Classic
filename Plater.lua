@@ -11132,8 +11132,7 @@ function SlashCmdList.PLATER (msg, editbox)
 	if (msg == "version") then
 		Plater.GetVersionInfo(true)
 		return
-	else
-	if (msg == "dignostico" or msg == "diag" or msg == "debug") then
+	elseif (msg == "dignostico" or msg == "diag" or msg == "debug") then
 		
 		print ("Plater Diagnostic:")
 		for i = 1, #cvarDiagList do
