@@ -10112,7 +10112,11 @@ end
 		for i = 1, #scriptOptions do
 			local thisOption = scriptOptions[i]
 			if options_for_config_table[thisOption.Type] then
-				PLATER_GLOBAL_MOD_ENV [scriptObject.Name].config[thisOption.Key] = scriptOptionsValues[thisOption.Key] or thisOption.Value
+				if type(scriptOptionsValues[thisOption.Key]) == "boolean" then
+					PLATER_GLOBAL_MOD_ENV [scriptObject.Name].config[thisOption.Key] = scriptOptionsValues[thisOption.Key]
+				else
+					PLATER_GLOBAL_MOD_ENV [scriptObject.Name].config[thisOption.Key] = scriptOptionsValues[thisOption.Key] or thisOption.Value
+				end
 			end
 		end
 		
@@ -10204,7 +10208,11 @@ end
 		for i = 1, #scriptOptions do
 			local thisOption = scriptOptions[i]
 			if options_for_config_table[thisOption.Type] then
-				PLATER_GLOBAL_SCRIPT_ENV [scriptObject.Name].config[thisOption.Key] = scriptOptionsValues[thisOption.Key] or thisOption.Value
+				if type(scriptOptionsValues[thisOption.Key]) == "boolean" then
+					PLATER_GLOBAL_SCRIPT_ENV [scriptObject.Name].config[thisOption.Key] = scriptOptionsValues[thisOption.Key]
+				else
+					PLATER_GLOBAL_SCRIPT_ENV [scriptObject.Name].config[thisOption.Key] = scriptOptionsValues[thisOption.Key] or thisOption.Value
+				end
 			end
 		end
 
