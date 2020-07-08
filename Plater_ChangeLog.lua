@@ -8,6 +8,8 @@ function Plater.GetChangelogTable()
 	if (not Plater.ChangeLogTable) then
 		Plater.ChangeLogTable = {
 		
+			{1594193442,  "Backend Changes", "July 8th, 2020", "Switching to WoW Threat API."},
+			
 			{1593011350,  "Bug Fix", "June 26th, 2020", "Fixing an issue with the 'Use Tank Threat Colors' setting not applying properly."},
 			{1593011350,  "Bug Fix", "June 24th, 2020", "Fixing an issue with reputation standing showing on friendly NPCs instead of the unit title when color blind mode is enabled."},
 			{1593011350,  "New Feature", "June 24th, 2020", "Introducing 'Custom Options' for Mods and Scripts as per profile settings for the mod/script."},

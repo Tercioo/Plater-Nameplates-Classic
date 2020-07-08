@@ -46,7 +46,8 @@ local pairs = pairs
 local InCombatLockdown = InCombatLockdown
 local UnitIsPlayer = UnitIsPlayer
 local UnitClassification = UnitClassification
---local UnitDetailedThreatSituation = UnitDetailedThreatSituation
+local UnitDetailedThreatSituation = UnitDetailedThreatSituation
+local UnitThreatSituation = UnitThreatSituation
 local UnitCanAttack = UnitCanAttack
 local IsSpellInRange = IsSpellInRange
 local abs = math.abs
@@ -97,18 +98,6 @@ if LCD then
 	LCD.RegisterCallback(Plater, "UNIT_BUFF", function(event, unit)end)
 	UnitAura = LCD.UnitAuraWithBuffs
 end
-
---threat stuff from: https://github.com/dfherr/LibThreatClassic2
-local ThreatLib = LibStub:GetLibrary ("LibThreatClassic2")
-
-local UnitThreatSituation = function (unit, mob)
-    return ThreatLib:UnitThreatSituation (unit, mob)
-end
-
-local UnitDetailedThreatSituation = function (unit, mob)
-    return ThreatLib:UnitDetailedThreatSituation (unit, mob)
-end
-
 
 --> when a hook script is compiled, it increases the build version, so the handler for running scripts will notice in the change and update the script in real time
 local PLATER_HOOK_BUILD = 1
@@ -5776,11 +5765,7 @@ end
 		end
 		
 		--todo: threat on classic
-		local isTanking, threatStatus, threatpct= UnitDetailedThreatSituation ("player", self.displayedUnit)
-		if threatpct == nil and threatStatus == 0 and UnitIsUnit("player", self.displayedUnit.."target") then
-			isTanking = 1
-			threatStatus = 3
-		end
+		local isTanking, threatStatus, threatpct = UnitDetailedThreatSituation ("player", self.displayedUnit)
 		
 		--expose all threat situation to scripts
 		self.namePlateThreatIsTanking = isTanking
@@ -5899,7 +5884,7 @@ end
 					Plater.CheckRange (self.PlateFrame, true)
 				end
 			else 	
-				if (threatStatus == 0 and threatpct == nil) then
+				if (threatStatus == nil) then
 					self.PlateFrame.playerHasAggro = false
 					
 					--> unit is in combat?
