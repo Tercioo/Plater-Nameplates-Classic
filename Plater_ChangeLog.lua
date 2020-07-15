@@ -8,6 +8,9 @@ function Plater.GetChangelogTable()
 	if (not Plater.ChangeLogTable) then
 		Plater.ChangeLogTable = {
 		
+			{1594844798,  "Bug Fix", "July 15th, 2020", "The event code buttons now show the correct code."},
+			{1594844798,  "Backend Changes", "July 15th, 2020", "'Hide OmniCC' now surpresses tullaCC as well. Option available for Boss-Mod-Auras as well."},
+			
 			{1594193442,  "Backend Changes", "July 8th, 2020", "Switching to WoW Threat API."},
 			
 			{1593011350,  "Bug Fix", "June 26th, 2020", "Fixing an issue with the 'Use Tank Threat Colors' setting not applying properly."},
