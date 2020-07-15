@@ -4583,10 +4583,10 @@ function Plater.CreateScriptingPanel()
 				local code_hide_button = DF:CreateButton(scriptingFrame, on_select_code_type, codeButtonSize[1], codeButtonSize[2], "On Hide", 3, nil, nil, nil, nil, nil, DF:GetTemplate ("button", "OPTIONS_BUTTON_TEMPLATE"), DF:GetTemplate ("font", "PLATER_BUTTON"))
 				code_hide_button:SetPoint("left", code_onupdate_button, "right", 2, 0)
 
-				tinsert(scriptingFrame.scriptButtons, code_constructor_button)
-				tinsert(scriptingFrame.scriptButtons, code_onshow_button)
 				tinsert(scriptingFrame.scriptButtons, code_onupdate_button)
+				tinsert(scriptingFrame.scriptButtons, code_constructor_button)
 				tinsert(scriptingFrame.scriptButtons, code_hide_button)
+				tinsert(scriptingFrame.scriptButtons, code_onshow_button)
 				tinsert(scriptingFrame.scriptButtons, code_oninit_button)
 
 			function scriptingFrame.UpdateScriptsButton()
