@@ -7491,60 +7491,60 @@ end
 		function (widget, config, attachTo, centered)--1
 			widget:ClearAllPoints()
 			local widgetRelative = centered and "bottom" or "bottomleft"
-			PixelUtil.SetPoint (widget, widgetRelative, attachTo, "topleft", config.x, config.y, 0, 0)
+			DFPixelUtil.SetPoint (widget, widgetRelative, attachTo, "topleft", config.x, config.y, 0, 0)
 		end,
 		function (widget, config, attachTo, centered)--2
 			widget:ClearAllPoints()
 			local widgetRelative = centered and "center" or "right"
-			PixelUtil.SetPoint (widget, widgetRelative, attachTo, "left", config.x, config.y, 0, 0)
+			DFPixelUtil.SetPoint (widget, widgetRelative, attachTo, "left", config.x, config.y, 0, 0)
 		end,
 		function (widget, config, attachTo, centered)--3
 			widget:ClearAllPoints()
 			local widgetRelative = centered and "top" or "topleft"
-			PixelUtil.SetPoint (widget, widgetRelative, attachTo, "bottomleft", config.x, config.y, 0, 0)
+			DFPixelUtil.SetPoint (widget, widgetRelative, attachTo, "bottomleft", config.x, config.y, 0, 0)
 		end,
 		function (widget, config, attachTo, centered)--4
 			widget:ClearAllPoints()
-			PixelUtil.SetPoint (widget, "top", attachTo, "bottom", config.x, config.y, 0, 0)
+			DFPixelUtil.SetPoint (widget, "top", attachTo, "bottom", config.x, config.y, 0, 0)
 		end,
 		function (widget, config, attachTo, centered)--5
 			widget:ClearAllPoints()
 			local widgetRelative = centered and "top" or "topright"
-			PixelUtil.SetPoint (widget, widgetRelative, attachTo, "bottomright", config.x, config.y, 0, 0)
+			DFPixelUtil.SetPoint (widget, widgetRelative, attachTo, "bottomright", config.x, config.y, 0, 0)
 		end,
 		function (widget, config, attachTo, centered)--6
 			widget:ClearAllPoints()
 			local widgetRelative = centered and "center" or "left"
-			PixelUtil.SetPoint (widget, widgetRelative, attachTo, "right", config.x, config.y, 0, 0)
+			DFPixelUtil.SetPoint (widget, widgetRelative, attachTo, "right", config.x, config.y, 0, 0)
 		end,
 		function (widget, config, attachTo, centered)--7
 			widget:ClearAllPoints()
 			local widgetRelative = centered and "bottom" or "bottomright"
-			PixelUtil.SetPoint (widget, widgetRelative, attachTo, "topright", config.x, config.y, 0, 0)
+			DFPixelUtil.SetPoint (widget, widgetRelative, attachTo, "topright", config.x, config.y, 0, 0)
 		end,
 		function (widget, config, attachTo, centered)--8
 			widget:ClearAllPoints()
-			PixelUtil.SetPoint (widget, "bottom", attachTo, "top", config.x, config.y, 0, 0)
+			DFPixelUtil.SetPoint (widget, "bottom", attachTo, "top", config.x, config.y, 0, 0)
 		end,
 		function (widget, config, attachTo, centered)--9
 			widget:ClearAllPoints()
-			PixelUtil.SetPoint (widget, "center", attachTo, "center", config.x, config.y, 0, 0)
+			DFPixelUtil.SetPoint (widget, "center", attachTo, "center", config.x, config.y, 0, 0)
 		end,
 		function (widget, config, attachTo, centered)--10
 			widget:ClearAllPoints()
-			PixelUtil.SetPoint (widget, "left", attachTo, "left", config.x, config.y, 0, 0)
+			DFPixelUtil.SetPoint (widget, "left", attachTo, "left", config.x, config.y, 0, 0)
 		end,
 		function (widget, config, attachTo, centered)--11
 			widget:ClearAllPoints()
-			PixelUtil.SetPoint (widget, "right", attachTo, "right", config.x, config.y, 0, 0)
+			DFPixelUtil.SetPoint (widget, "right", attachTo, "right", config.x, config.y, 0, 0)
 		end,
 		function (widget, config, attachTo, centered)--12
 			widget:ClearAllPoints()
-			PixelUtil.SetPoint (widget, "top", attachTo, "top", config.x, config.y, 0, 0)
+			DFPixelUtil.SetPoint (widget, "top", attachTo, "top", config.x, config.y, 0, 0)
 		end,
 		function (widget, config, attachTo, centered)--13
 			widget:ClearAllPoints()
-			PixelUtil.SetPoint (widget, "bottom", attachTo, "bottom", config.x, config.y, 0, 0)
+			DFPixelUtil.SetPoint (widget, "bottom", attachTo, "bottom", config.x, config.y, 0, 0)
 		end
 	}
 
