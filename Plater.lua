@@ -4235,6 +4235,8 @@ end
 					end
 				end
 				
+				horizontalLength = 1 + DB_AURA_PADDING
+				
 			else --it's growing from center
 				
 				local previousIcon
