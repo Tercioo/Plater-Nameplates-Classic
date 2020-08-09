@@ -6985,7 +6985,7 @@ local relevance_options = {
 				Plater.UpdateAllPlates()
 			end,
 			name = "Hide Player Name",
-			desc = "Hide friendly player names. \n\n|cFFFFFF00Important|r: Guild name is attached to the name, so if this is checked the below setting will be overwritten.",
+			desc = "Hide friendly players' names. \n\n|cFFFFFF00Important|r: Guild name is attached to the name, so if this is checked the below setting will be overwritten.",
 		},
 		{
 			type = "toggle",
@@ -6995,7 +6995,7 @@ local relevance_options = {
 				Plater.UpdateAllPlates (true)
 			end,
 			name = "Show Guild Name",
-			desc = "Show Guild Name",
+			desc = "Show friendly players' guild name \n\n|cFFFFFF00Important|r: Guild name is attached to the name, so if hide player name is checked this will be overwritten.",
 		},
 		{
 			type = "toggle",
@@ -7915,13 +7915,23 @@ local relevance_options = {
 		},
 		{
 			type = "toggle",
+			get = function() return Plater.db.profile.plate_config.enemyplayer.hide_thename end,
+			set = function (self, fixedparam, value) 
+				Plater.db.profile.plate_config.enemyplayer.hide_thename = value
+				Plater.UpdateAllPlates (true)
+			end,
+			name = "Hide Player Name",
+			desc = "Hide enemy players' names. \n\n|cFFFFFF00Important|r: Guild name is attached to the name, so if this is checked the below setting will be overwritten.",
+		},
+		{
+			type = "toggle",
 			get = function() return Plater.db.profile.plate_config.enemyplayer.show_guild_name end,
 			set = function (self, fixedparam, value) 
 				Plater.db.profile.plate_config.enemyplayer.show_guild_name = value
 				Plater.UpdateAllPlates (true)
 			end,
 			name = "Show Guild Name",
-			desc = "Show Guild Name",
+			desc = "Show enemy players' guild name \n\n|cFFFFFF00Important|r: Guild name is attached to the name, so if hide player name is checked this will be overwritten.",
 		},
 		
 		{type = "blank"},

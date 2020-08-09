@@ -6763,6 +6763,14 @@ end
 				Plater.AddGuildNameToPlayerName (plateFrame)
 			end
 		end
+		
+		-- Check if we should hide player name or not
+		if (plateFrame.PlateConfig.hide_thename) then
+			Plater.HideName (plateFrame.unitFrame)
+		else
+			Plater.ShowName (plateFrame.unitFrame)
+		end
+
 	end
 
 	function Plater.UpdateUnitNameTextSize (plateFrame, nameString)
@@ -7556,7 +7564,7 @@ end
 		anchor_functions [config.side] (widget, config, attachTo, centered)
 	end
 
-	--check the setting 'only_damaged', 'only_thename', and 'hide_thename' for player characters. not critical code, can run slow
+	--check the setting 'only_damaged' and 'only_thename' for player characters. not critical code, can run slow
 	function Plater.ParseHealthSettingForPlayer (plateFrame) --private
 		plateFrame.IsFriendlyPlayerWithoutHealthBar = false
 
@@ -7578,6 +7586,7 @@ end
 		else
 			Plater.ShowHealthBar (plateFrame.unitFrame)
 		end
+		-- Check if we should hide friendly player names
 		if (DB_PLATE_CONFIG [ACTORTYPE_FRIENDLY_PLAYER].hide_thename) then
 			Plater.HideName (plateFrame.unitFrame)
 			plateFrame.IsFriendlyPlayerWithoutName = true

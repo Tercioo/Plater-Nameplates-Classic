@@ -166,6 +166,7 @@ PLATER_DEFAULT_SETTINGS = {
 			enemyplayer = {
 				enabled = true,
 				show_guild_name = false,
+				hide_thename = false,
 				
 				use_playerclass_color = true,
 				fixed_class_color = {1, .4, .1},
