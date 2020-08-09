@@ -6303,7 +6303,7 @@ end
 			--return
 			--needReset = true
 			
-		elseif (plateFrame.IsFriendlyPlayerWithoutHealthBar) then --not critical code
+		elseif (plateFrame.IsFriendlyPlayerWithoutHealthBar) and (not plateFrame.IsFriendlyPlayerWithoutName) then --not critical code
 			--when the option to show only the player name is enabled
 			--special string to show the player name
 			local nameFontString = plateFrame.ActorNameSpecial
@@ -7556,7 +7556,7 @@ end
 		anchor_functions [config.side] (widget, config, attachTo, centered)
 	end
 
-	--check the setting 'only_damaged' and 'only_thename' for player characters. not critical code, can run slow
+	--check the setting 'only_damaged', 'only_thename', and 'hide_thename' for player characters. not critical code, can run slow
 	function Plater.ParseHealthSettingForPlayer (plateFrame) --private
 		plateFrame.IsFriendlyPlayerWithoutHealthBar = false
 
@@ -7577,6 +7577,13 @@ end
 			
 		else
 			Plater.ShowHealthBar (plateFrame.unitFrame)
+		end
+		if (DB_PLATE_CONFIG [ACTORTYPE_FRIENDLY_PLAYER].hide_thename) then
+			Plater.HideName (plateFrame.unitFrame)
+			plateFrame.IsFriendlyPlayerWithoutName = true
+		else
+			Plater.ShowName (plateFrame.unitFrame)
+			plateFrame.IsFriendlyPlayerWithoutName = false
 		end
 	end
 
@@ -9321,6 +9328,15 @@ end
 		elseif (showNameNpc) then
 			Plater.UpdatePlateText (unitFrame.PlateFrame, DB_PLATE_CONFIG [ACTORTYPE_ENEMY_NPC], true)
 		end
+	end
+	
+	--hide the name
+	function Plater.HideName (unitFrame)
+		unitFrame.unitName:Hide()
+	end
+	--show the name
+	function Plater.ShowName (unitFrame)
+		unitFrame.unitName:Show()
 	end
 	
 	--forces a range check regardless of the user options and only changes the member_range flag, no alpha changes

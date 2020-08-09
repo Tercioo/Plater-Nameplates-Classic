@@ -6974,8 +6974,18 @@ local relevance_options = {
 				Plater.db.profile.plate_config [ACTORTYPE_FRIENDLY_PLAYER].only_thename = value
 				Plater.UpdateAllPlates()
 			end,
-			name = "Only Show Player Name",
-			desc = "Hide the health bar, only show the character name.\n\n|cFFFFFF00Important|r: If 'Only Damaged Players' is selected and the player is damaged, this setting will be overwritten and the health bar will be shown.",
+			name = "Hide Player Health Bar",
+			desc = "Hide the health bar.\n\n|cFFFFFF00Important|r: If 'Only Damaged Players' is selected and the player is damaged, this setting will be overwritten and the health bar will be shown.",
+		},
+		{
+			type = "toggle",
+			get = function() return Plater.db.profile.plate_config [ACTORTYPE_FRIENDLY_PLAYER].hide_thename end,
+			set = function (self, fixedparam, value) 
+				Plater.db.profile.plate_config [ACTORTYPE_FRIENDLY_PLAYER].hide_thename = value
+				Plater.UpdateAllPlates()
+			end,
+			name = "Hide Player Name",
+			desc = "Hide friendly player names. \n\n|cFFFFFF00Important|r: Guild name is attached to the name, so if this is checked the below setting will be overwritten.",
 		},
 		{
 			type = "toggle",
