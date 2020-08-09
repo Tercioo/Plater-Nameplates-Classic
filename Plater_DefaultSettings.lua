@@ -93,6 +93,7 @@ PLATER_DEFAULT_SETTINGS = {
 				enabled = true,
 				only_damaged = true,
 				only_thename = false,
+				hide_thename = false,
 				click_through = true,
 				show_guild_name = false,
 				
