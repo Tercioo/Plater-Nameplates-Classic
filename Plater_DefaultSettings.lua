@@ -495,7 +495,14 @@ PLATER_DEFAULT_SETTINGS = {
 		},
 		
 		login_counter = 0,
+		
+		spell_prediction = {
+			enabled = false,
+			castbar_height = 12,
 
+		},
+
+		--transparency control
 		transparency_behavior = 0x1,
 		transparency_behavior_use_division = false,
 		non_targeted_alpha_enabled = false,
