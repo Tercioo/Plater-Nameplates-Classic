@@ -3132,7 +3132,7 @@ function Plater.OnInit() --private ~oninit
 		C_Timer.After (4, Plater.GetHealthCutoffValue)
 		C_Timer.After (4.2, Plater.ForceCVars)
 		
-		_Timer.After (2, Plater.InitializeSpellPrediction)
+		C_Timer.After (2, Plater.InitializeSpellPrediction)
 	
 	--hooking scripts has load conditions, here it creates a load filter for plater
 	--so when a load condition is changed it reload hooks
