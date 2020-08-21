@@ -905,7 +905,7 @@ Plater.DefaultSpellRangeList = {
 		end
  
 		--is using the range check by ability
-		if (DB_USE_RANGE_CHECK) then
+		if (DB_USE_RANGE_CHECK and Plater.SpellForRangeCheck) then
 			--check when the unit just has been added to the screen
 			local isInRange = IsSpellInRange (Plater.SpellForRangeCheck, plateFrame [MEMBER_UNITID]) == 1
 
