@@ -409,7 +409,10 @@ local triggerCastBar = function(timerObject)
 
 	elseif (timerObject.attachToCurrentTarget) then
 		plateFrame = C_NamePlate.GetNamePlateForUnit("target")
+	end
 
+	if (not plateFrame)  then
+		return
 	end
 
 	--set the castbar config
