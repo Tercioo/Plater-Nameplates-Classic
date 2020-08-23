@@ -6542,7 +6542,7 @@ local relevance_options = {
 				Plater.RefreshDBUpvalues()
 			end,
 			name = "Hide Friendly Cast Bar",
-			desc = "Hide Friendly Cast Bar",
+			desc = "Hide Friendly Cast Bar. Requires /reload to take effect.",
 		},
 		{
 			type = "toggle",
@@ -6552,7 +6552,7 @@ local relevance_options = {
 				Plater.RefreshDBUpvalues()
 			end,
 			name = "Hide Enemy Cast Bar",
-			desc = "Hide Enemy Cast Bar",
+			desc = "Hide Enemy Cast Bar. Requires /reload to take effect.",
 		},
 
 		{type = "blank"},
