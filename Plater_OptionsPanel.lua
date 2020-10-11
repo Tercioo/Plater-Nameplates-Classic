@@ -11732,7 +11732,7 @@ local relevance_options = {
 				end
 			end,
 			name = "Show Friendly Totems" .. CVarIcon,
-			desc = "Show enemy totems" .. CVarDesc,
+			desc = "Show friendly totems" .. CVarDesc,
 			nocombat = true,
 		},
 
