@@ -858,7 +858,7 @@ Plater.DefaultSpellRangeList = {
 			return
 		
 		--the unit is friendly or not using range check and non targets alpha
-		elseif (plateFrame [MEMBER_REACTION] >= 5 or (not DB_USE_RANGE_CHECK and not DB_USE_NON_TARGETS_ALPHA)) then
+		elseif ((plateFrame [MEMBER_REACTION] >= 5) and not DB_USE_RANGE_CHECK and not DB_USE_NON_TARGETS_ALPHA) then
 			unitFrame:SetAlpha (1)
 			unitFrame.healthBar:SetAlpha (1)
 			if not castBarFade then
@@ -905,7 +905,7 @@ Plater.DefaultSpellRangeList = {
 		end
  
 		--is using the range check by ability
-		if (DB_USE_RANGE_CHECK and Plater.SpellForRangeCheck) then
+		if (Plater.SpellForRangeCheck and DB_USE_RANGE_CHECK and not (plateFrame [MEMBER_REACTION] >= 5)) then
 			--check when the unit just has been added to the screen
 			local isInRange = IsSpellInRange (Plater.SpellForRangeCheck, plateFrame [MEMBER_UNITID]) == 1
 
