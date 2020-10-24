@@ -5434,6 +5434,7 @@ end
 			return
 		end
 		
+		local profile = Plater.db.profile
 		local unitFrame = plateFrame.unitFrame
 		local healthBar = unitFrame.healthBar
 		local castBar = unitFrame.castBar
@@ -5452,7 +5453,6 @@ end
 		
 		local actorType = plateFrame.actorType
 		
-		local profile = Plater.db.profile
 		--get the config for this actor type
 		local plateConfigs = DB_PLATE_CONFIG [actorType]
 		--get the config key based if the player is in combat
