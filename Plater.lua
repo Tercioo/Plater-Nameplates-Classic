@@ -3755,7 +3755,7 @@ function Plater.OnInit() --private ~oninit
 					local isInCombat = profile.use_player_combat_state and PLAYER_IN_COMBAT or unitFrame.InCombat
 					
 					--cut the spell name text to fit within the castbar
-					Plater.UpdateSpellNameSize (self.Text, unitFrame.ActorType, isInCombat)
+					Plater.UpdateSpellNameSize (self.Text, unitFrame.ActorType, nil, isInCombat)
 
 					Plater.UpdateCastbarTargetText (self)
 					shouldRunCastStartHook = true
