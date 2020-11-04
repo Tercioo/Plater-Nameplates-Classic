@@ -4693,7 +4693,7 @@ function Plater.CreateScriptingPanel()
 		edit_script_frame.ScriptNameLabel:SetPoint ("topleft", edit_script_frame, "topleft", 10, 2)
 		edit_script_frame.ScriptIconLabel:SetPoint ("topleft", edit_script_frame, "topleft", 170, 0)
 		edit_script_frame.ScriptDescLabel:SetPoint ("topleft", edit_script_frame, "topleft", 10, -40)
-		edit_script_frame.ScriptPrioLabel:SetPoint ("topleft", edit_script_frame, "topleft", 10, -110)
+		edit_script_frame.ScriptPrioLabel:SetPoint ("topleft", edit_script_frame, "topleft", 10, -80)
 		
 		script_type_label:SetPoint ("topleft", edit_script_frame, "topleft", 10, -140)
 		add_trigger_label:SetPoint ("topleft", edit_script_frame, "topleft", 10, -177)
