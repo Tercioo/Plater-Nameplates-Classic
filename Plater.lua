@@ -4282,7 +4282,7 @@ end
 			local verticalHeight = 1
 			local firstIcon
 		
-			if (profile.aura_consolidate) then
+			if (Plater.db.profile.aura_consolidate) then
 				Plater.ConsolidateAuraIcons (self)
 			end
 			
@@ -4310,9 +4310,6 @@ end
 				growDirection = DB_AURA_GROW_DIRECTION2
 				anchorSide = profile.aura_frame2_anchor.side
 			end
-			
-			--get the table where all icon frames are stored in
-			local iconFrameContainer = self.PlaterBuffList
 			
 			--get the amount of auras shown in the frame, this variable should be always reliable
 			local amountFramesShown = self.amountAurasShown
@@ -4348,7 +4345,7 @@ end
 					relRowIconPoint = rowGrowthDirectionUp and "topleft" or "bottomleft"
 					relFirstIconPoint = rowGrowthDirectionUp and "bottomleft" or "topleft"
 					paddingMult = 1
-
+				
 				-- <-- right to left
 				elseif (growDirection == 1) then
 					relIconPoint = rowGrowthDirectionUp and "bottomright" or "topright"
@@ -4358,6 +4355,7 @@ end
 					paddingMult = -1
 				end
 				
+				--iterate among all icon frames
 				for i = 1, #iconFrameContainer do
 					--get the icon id from the icon frame container
 					local iconFrame = iconFrameContainer [i]
@@ -4379,7 +4377,7 @@ end
 								verticalHeight = verticalHeight + profile.aura_breakline_space + firstIcon:GetHeight()
 								
 							else
-								iconFrame:SetPoint ("topright", lastIconUsed, "topleft", -DB_AURA_PADDING, 0)
+								iconFrame:SetPoint (relIconPoint, lastIconUsed, relIconPointTo, DB_AURA_PADDING * paddingMult, 0)
 							end
 						end
 						
