@@ -8,6 +8,9 @@ function Plater.GetChangelogTable()
 	if (not Plater.ChangeLogTable) then
 		Plater.ChangeLogTable = {
 		
+			{1603571275,  "Backend Changes", "November 20th, 2020", "Switching mod/script code shadowing to DF."},
+			{1603571275,  "Bug Fix", "November 4th, 2020", "Fixing script priority slider position."},
+			
 			{1603571275,  "Backend Changes", "October 22nd, 2020", "Adding 'upper range' execute ranges. (e.g. 100% to 80%). Useably via 'Plater.SetExecuteRange (isExecuteEnabled, healthAmountLower, healthAmountUpper)'"},
 			
 			{1603571275,  "Bug Fix", "October 20th, 2020", "Fixing issue with no-combat alpha and coloring."},
