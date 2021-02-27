@@ -3676,11 +3676,11 @@ function Plater.OnInit() --private ~oninit
 				end
 
 				for _, plateFrame in ipairs (Plater.GetAllShownPlates()) do
+					local castBar = plateFrame.unitFrame.castBar
 					local textString = castBar.FrameOverlay.TargetName
 					textString:Show()
 					textString:SetText("Target Name")
 					
-					local castBar = plateFrame.unitFrame.castBar
 					if (castBar.finished and not castBar.playedFinishedTest) then
 						Plater.CastBarOnEvent_Hook (castBar, "UNIT_SPELLCAST_STOP", plateFrame.unitFrame.unit, plateFrame.unitFrame.unit)
 						castBar.playedFinishedTest = true
