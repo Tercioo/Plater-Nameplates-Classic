@@ -8633,8 +8633,9 @@ end
 		plateFrame.unitFrame.QuestAmountTotal = nil
 		
 		local useQuestie = false
+		local QuestieTooltips = QuestieLoader and QuestieLoader._modules["QuestieTooltips"]
 		if QuestieTooltips then
-			ScanQuestTextCache = QuestieTooltips:GetTooltip("u_"..plateFrame [MEMBER_NAME])
+			ScanQuestTextCache = QuestieTooltips:GetTooltip("m_"..plateFrame [MEMBER_NPCID])
 			if not ScanQuestTextCache then
 				ScanQuestTextCache = {}
 			end
